@@ -1,0 +1,38 @@
+.venv/
+myenv/
+# Исключить временные файлы Microsoft Office
+*~
+*.tmp
+*.log
+*.bak
+*.swp
+*.swo
+
+# Исключить временные файлы редакторов
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Исключить временные файлы IDE
+.idea/
+.vscode/
+*.suo
+*.ntvslog
+*.njsproj
+*.sln
+*.user
+
+# Исключить временные файлы компиляторов
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+
+# Исключить временные файлы системы
+Thumbs.db
+ehthumbs.db
+Desktop.ini
