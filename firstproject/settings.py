@@ -55,8 +55,8 @@ ROOT_URLCONF = 'firstproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [], # Сюда можно добавить дополнительные пути для поиска шаблонов
+        'APP_DIRS': True, # Эта опция включает поиск в папке templates/ приложений
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',

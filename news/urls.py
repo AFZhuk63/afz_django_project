@@ -10,3 +10,4 @@ urlpatterns = [
     path('catalog/<slug:slug>/', views.get_category_by_name),
 
 ]
+
