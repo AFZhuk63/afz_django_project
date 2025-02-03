@@ -1,26 +1,48 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
-from news.models import Article
-from .models import Article
+from news.models import Article, Category, Tag
+
 """
 Информация в шаблоны будет браться из базы данных
 Но пока, мы сделаем переменные, куда будем записывать информацию, которая пойдет в 
 контекст шаблона
 """
+# Пример данных для новостей
+
+
+ # Добавим в контекст шаблона информацию о новостях, чтобы все было в одном месте
+
 
 
 def main(request):
     """
     Представление рендерит шаблон main.html
     """
-    # return HttpResponse('Hello, world!')  # Вернёт страницу с надписью "Hello world!"
+    info = {
+        "users_count": 5,
+        "news_count": 10,
+        "menu": [
+            {"title": "Главная", "url": "/", "url_name": "index"},
+            {"title": "О проекте", "url": "/about/", "url_name": "about"},
+            {"title": "Каталог", "url": "/news/catalog/", "url_name": "catalog"},
+        ],
+    }
     return render(request, 'main.html', context=info)
 
 
 def about(request):
     """Представление рендерит шаблон about.html"""
-    # return HttpResponse('information page')
+    info = {
+
+        "users_count": 5,
+        "news_count": 10,
+        "menu": [
+            {"title": "Главная", "url": "/", "url_name": "index"},
+            {"title": "О проекте", "url": "/about/", "url_name": "about"},
+            {"title": "Каталог", "url": "/news/catalog/", "url_name": "catalog"},
+        ],
+    }
     return render(request, 'about.html', context=info)
 
 
@@ -55,26 +77,40 @@ def get_category_by_name(request, slug):
 
 def get_all_news(request):
     """
-   Принимает информацию о проекте (словарь info)
-   """
-    # return render(request, 'news/catalog.html', context=info)
+    Принимает информацию о проекте (словарь info)
+    """
     articles = Article.objects.all()
+    articles_list = [{'id': a.id,'title': a.title, 'content': a.content,
+                      'category': Category.objects.get(pk= a.category_id).name,
+                      'tags': [tag.name for tag in a.tags.all()]} for a in Article.objects.all()]
+
+    info = {
+        'news': articles,
+        "users_count": 5,
+        "news_count": 10,
+        "menu": [
+            {"title": "Главная",
+             "url": "/",
+             "url_name": "index"},
+            {"title": "О проекте",
+             "url": "/about/",
+             "url_name": "about"},
+            {"title": "Каталог",
+             "url": "/news/catalog/",
+             "url_name": "catalog"},
+        ]}
+
+    return render(request, 'news/catalog.html', context=info)
 
 
-info = {
-    "users_count": 100600,
-    "news_count": 100600,
-    "menu": [
-        {"title": "Главная", "url": "/", "url_name": "index"},
-        {"title": "О проекте", "url": "/about/", "url_name": "about"},
-        {"title": "Каталог", "url": "/news/catalog/", "url_name": "catalog"},
-    ]
-}
+def article_from_list_common(art_id: int , a_list: list):
+    return (item for item in a_list if item.id == art_id)
 
-# def get_news_by_id(request, news_id):
-#     if news_id > 10:
-#         return HttpResponse('Такой новости нет', status=404)
-#     return HttpResponse(f'Вы открыли новость {news_id}')  # Вернёт страницу с надписью "Вы открыли новость {news_id}"
+def get_article(article_id: int):
+    art = Article.objects.get(pk = article_id)
+    art_category = Category.objects.get(pk= art.category_id)
+    tags = ', '.join([tag.name for tag in art.tags.all()])
+    return {'title': art.title, 'content': art.content, 'category': art_category.name, 'tags': tags}
 
 
 def get_detail_article_by_id(request, article_id):
@@ -82,6 +118,8 @@ def get_detail_article_by_id(request, article_id):
     Возвращает детальную информацию по новости для представления
     """
     article = get_object_or_404(Article, id=article_id)
+    #article = get_article(article_id)
+
     info = {
         'article': article,
         "users_count": 5,
@@ -93,3 +131,4 @@ def get_detail_article_by_id(request, article_id):
         ],
     }
     return render(request, 'news/article_detail.html', context=info)
+
