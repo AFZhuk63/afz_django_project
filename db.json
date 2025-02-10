@@ -1,0 +1,2368 @@
+[
+{
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": 1,
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+        "name": "Can change log entry",
+        "content_type": 1,
+        "codename": "change_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+        "name": "Can delete log entry",
+        "content_type": 1,
+        "codename": "delete_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+        "name": "Can view log entry",
+        "content_type": 1,
+        "codename": "view_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+        "name": "Can add permission",
+        "content_type": 2,
+        "codename": "add_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+        "name": "Can change permission",
+        "content_type": 2,
+        "codename": "change_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+        "name": "Can delete permission",
+        "content_type": 2,
+        "codename": "delete_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+        "name": "Can view permission",
+        "content_type": 2,
+        "codename": "view_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+        "name": "Can add group",
+        "content_type": 3,
+        "codename": "add_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+        "name": "Can change group",
+        "content_type": 3,
+        "codename": "change_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+        "name": "Can delete group",
+        "content_type": 3,
+        "codename": "delete_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+        "name": "Can view group",
+        "content_type": 3,
+        "codename": "view_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+        "name": "Can add user",
+        "content_type": 4,
+        "codename": "add_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+        "name": "Can change user",
+        "content_type": 4,
+        "codename": "change_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+        "name": "Can delete user",
+        "content_type": 4,
+        "codename": "delete_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+        "name": "Can view user",
+        "content_type": 4,
+        "codename": "view_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+        "name": "Can add content type",
+        "content_type": 5,
+        "codename": "add_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+        "name": "Can change content type",
+        "content_type": 5,
+        "codename": "change_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+        "name": "Can delete content type",
+        "content_type": 5,
+        "codename": "delete_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+        "name": "Can view content type",
+        "content_type": 5,
+        "codename": "view_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+        "name": "Can add session",
+        "content_type": 6,
+        "codename": "add_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+        "name": "Can change session",
+        "content_type": 6,
+        "codename": "change_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+        "name": "Can delete session",
+        "content_type": 6,
+        "codename": "delete_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+        "name": "Can view session",
+        "content_type": 6,
+        "codename": "view_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+        "name": "Can add article",
+        "content_type": 7,
+        "codename": "add_article"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+        "name": "Can change article",
+        "content_type": 7,
+        "codename": "change_article"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+        "name": "Can delete article",
+        "content_type": 7,
+        "codename": "delete_article"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+        "name": "Can view article",
+        "content_type": 7,
+        "codename": "view_article"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+        "name": "Can add category",
+        "content_type": 8,
+        "codename": "add_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+        "name": "Can change category",
+        "content_type": 8,
+        "codename": "change_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+        "name": "Can delete category",
+        "content_type": 8,
+        "codename": "delete_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+        "name": "Can view category",
+        "content_type": 8,
+        "codename": "view_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+        "name": "Can add tag",
+        "content_type": 9,
+        "codename": "add_tag"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+        "name": "Can change tag",
+        "content_type": 9,
+        "codename": "change_tag"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+        "name": "Can delete tag",
+        "content_type": 9,
+        "codename": "delete_tag"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+        "name": "Can view tag",
+        "content_type": 9,
+        "codename": "view_tag"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+        "app_label": "admin",
+        "model": "logentry"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+        "app_label": "auth",
+        "model": "permission"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+        "app_label": "auth",
+        "model": "group"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+        "app_label": "auth",
+        "model": "user"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+        "app_label": "contenttypes",
+        "model": "contenttype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+        "app_label": "sessions",
+        "model": "session"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+        "app_label": "news",
+        "model": "article"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+        "app_label": "news",
+        "model": "category"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+        "app_label": "news",
+        "model": "tag"
+    }
+},
+{
+    "model": "news.article",
+    "pk": 1,
+    "fields": {
+        "title": "Кошки научились говорить",
+        "content": "Вчера в городе N кошки начали разговаривать на человеческом языке. Ученые в шоке.",
+        "publication_date": "2023-10-01T12:00:00Z",
+        "views": 0,
+        "category": 1,
+        "slug": "koshki-nauchilis-govorit",
+        "tags": [
+            1,
+            2
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 2,
+    "fields": {
+        "title": "Летающие собаки замечены над городом",
+        "content": "Жители города M сообщают о летающих собаках. Власти обещают разобраться.",
+        "publication_date": "2023-10-02T12:00:00Z",
+        "views": 0,
+        "category": 2,
+        "slug": "letayushchie-sobaki-zamecheny-nad-gorodom",
+        "tags": [
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 3,
+    "fields": {
+        "title": "Деревья начали ходить",
+        "content": "В лесу X деревья начали передвигаться. Экологи в панике.",
+        "publication_date": "2023-10-03T12:00:00Z",
+        "views": 0,
+        "category": 3,
+        "slug": "derevya-nachali-hodit",
+        "tags": [
+            5,
+            6
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 4,
+    "fields": {
+        "title": "Рыбы поют оперу",
+        "content": "В аквариуме Y рыбы начали петь оперные арии. Зрители в восторге.",
+        "publication_date": "2023-10-04T12:00:00Z",
+        "views": 0,
+        "category": 4,
+        "slug": "ryby-poyut-operu",
+        "tags": [
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 5,
+    "fields": {
+        "title": "Птицы строят небоскребы",
+        "content": "В городе Z птицы начали строить небоскребы. Архитекторы в недоумении.",
+        "publication_date": "2023-10-05T12:00:00Z",
+        "views": 0,
+        "category": 5,
+        "slug": "pticy-stroyat-neboskreby",
+        "tags": [
+            9,
+            10
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 6,
+    "fields": {
+        "title": "Медведи открыли ресторан",
+        "content": "В лесу W медведи открыли ресторан. Посетители довольны.",
+        "publication_date": "2023-10-06T12:00:00Z",
+        "views": 0,
+        "category": 6,
+        "slug": "medvedi-otkryli-restoran",
+        "tags": [
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 7,
+    "fields": {
+        "title": "Кролики играют в футбол",
+        "content": "В парке V кролики начали играть в футбол. Болельщики в восторге.",
+        "publication_date": "2023-10-07T12:00:00Z",
+        "views": 0,
+        "category": 7,
+        "slug": "kroliki-igrayut-v-futbol",
+        "tags": [
+            13,
+            14
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 8,
+    "fields": {
+        "title": "Лягушки учатся в университете",
+        "content": "В университете U лягушки начали посещать лекции. Студенты в шоке.",
+        "publication_date": "2023-10-08T12:00:00Z",
+        "views": 0,
+        "category": 1,
+        "slug": "lyagushki-uchatsya-v-universitete",
+        "tags": [
+            1,
+            2,
+            3
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 9,
+    "fields": {
+        "title": "Мыши открыли банк",
+        "content": "В городе T мыши открыли банк. Клиенты довольны.",
+        "publication_date": "2023-10-09T12:00:00Z",
+        "views": 0,
+        "category": 2,
+        "slug": "myshi-otkryli-bank",
+        "tags": [
+            4,
+            5,
+            6
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 10,
+    "fields": {
+        "title": "Пчелы строят космические корабли",
+        "content": "В лесу S пчелы начали строить космические корабли. Ученые в недоумении.",
+        "publication_date": "2023-10-10T12:00:00Z",
+        "views": 0,
+        "category": 3,
+        "slug": "pchely-stroyat-kosmicheskie-korabli",
+        "tags": [
+            7,
+            8,
+            9
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 11,
+    "fields": {
+        "title": "Слоны играют в шахматы",
+        "content": "В зоопарке R слоны начали играть в шахматы. Посетители в восторге.",
+        "publication_date": "2023-10-11T12:00:00Z",
+        "views": 0,
+        "category": 4,
+        "slug": "slony-igrayut-v-shahmaty",
+        "tags": [
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 12,
+    "fields": {
+        "title": "Куры открыли театр",
+        "content": "В деревне Q куры открыли театр. Зрители довольны.",
+        "publication_date": "2023-10-12T12:00:00Z",
+        "views": 0,
+        "category": 5,
+        "slug": "kury-otkryli-teatr",
+        "tags": [
+            13,
+            14,
+            15
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 13,
+    "fields": {
+        "title": "Лисы открыли школу",
+        "content": "В лесу P лисы открыли школу. Ученики довольны.",
+        "publication_date": "2023-10-13T12:00:00Z",
+        "views": 0,
+        "category": 6,
+        "slug": "lisy-otkryli-shkolu",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 14,
+    "fields": {
+        "title": "Белки открыли магазин",
+        "content": "В парке O белки открыли магазин. Покупатели довольны.",
+        "publication_date": "2023-10-14T12:00:00Z",
+        "views": 0,
+        "category": 7,
+        "slug": "belki-otkryli-magazin",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 15,
+    "fields": {
+        "title": "Зайцы открыли библиотеку",
+        "content": "В лесу N зайцы открыли библиотеку. Читатели довольны.",
+        "publication_date": "2023-10-15T12:00:00Z",
+        "views": 0,
+        "category": 1,
+        "slug": "zaytsy-otkryli-biblioteku",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 16,
+    "fields": {
+        "title": "Ежики открыли музей",
+        "content": "В городе M ежики открыли музей. Посетители довольны.",
+        "publication_date": "2023-10-16T12:00:00Z",
+        "views": 0,
+        "category": 2,
+        "slug": "ezhiki-otkryli-muzey",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 17,
+    "fields": {
+        "title": "Кроты открыли ресторан",
+        "content": "В лесу L кроты открыли ресторан. Посетители довольны.",
+        "publication_date": "2023-10-17T12:00:00Z",
+        "views": 0,
+        "category": 3,
+        "slug": "kroty-otkryli-restoran",
+        "tags": [
+            17,
+            18,
+            19,
+            20
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 18,
+    "fields": {
+        "title": "Летучие мыши открыли кинотеатр",
+        "content": "В городе K летучие мыши открыли кинотеатр. Зрители довольны.",
+        "publication_date": "2023-10-18T12:00:00Z",
+        "views": 0,
+        "category": 4,
+        "slug": "letuchie-myshi-otkryli-kinoteatr",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 19,
+    "fields": {
+        "title": "Пауки открыли спортзал",
+        "content": "В лесу J пауки открыли спортзал. Посетители довольны.",
+        "publication_date": "2023-10-19T12:00:00Z",
+        "views": 0,
+        "category": 5,
+        "slug": "pauki-otkryli-sportzal",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 20,
+    "fields": {
+        "title": "Жабы открыли кафе",
+        "content": "В городе I жабы открыли кафе. Посетители довольны.",
+        "publication_date": "2023-10-20T12:00:00Z",
+        "views": 0,
+        "category": 6,
+        "slug": "zhaby-otkryli-kafe",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 21,
+    "fields": {
+        "title": "Утки открыли салон красоты",
+        "content": "В парке H утки открыли салон красоты. Клиенты довольны.",
+        "publication_date": "2023-10-21T12:00:00Z",
+        "views": 0,
+        "category": 7,
+        "slug": "utki-otkryli-salon-krasoty",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 22,
+    "fields": {
+        "title": "Гуси открыли фитнес-центр",
+        "content": "В городе G гуси открыли фитнес-центр. Посетители довольны.",
+        "publication_date": "2023-10-22T12:00:00Z",
+        "views": 0,
+        "category": 1,
+        "slug": "gusi-otkryli-fitnes-tsentr",
+        "tags": [
+            17,
+            18,
+            19,
+            20
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 23,
+    "fields": {
+        "title": "Лебеди открыли спа-салон",
+        "content": "В озере F лебеди открыли спа-салон. Клиенты довольны.",
+        "publication_date": "2023-10-23T12:00:00Z",
+        "views": 0,
+        "category": 2,
+        "slug": "lebedi-otkryli-spa-salon",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 24,
+    "fields": {
+        "title": "Фламинго открыли танцевальную студию",
+        "content": "В парке E фламинго открыли танцевальную студию. Посетители довольны.",
+        "publication_date": "2023-10-24T12:00:00Z",
+        "views": 0,
+        "category": 3,
+        "slug": "flamingo-otkryli-tantsevalnuyu-studiyu",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 25,
+    "fields": {
+        "title": "Пеликаны открыли йога-студию",
+        "content": "В городе D пеликаны открыли йога-студию. Посетители довольны.",
+        "publication_date": "2023-10-25T12:00:00Z",
+        "views": 0,
+        "category": 4,
+        "slug": "pelikany-otkryli-yoga-studiyu",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 26,
+    "fields": {
+        "title": "Аисты открыли детский сад",
+        "content": "В деревне C аисты открыли детский сад. Родители довольны.",
+        "publication_date": "2023-10-26T12:00:00Z",
+        "views": 0,
+        "category": 5,
+        "slug": "aisty-otkryli-detskiy-sad",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 27,
+    "fields": {
+        "title": "Цапли открыли школу искусств",
+        "content": "В городе B цапли открыли школу искусств. Ученики довольны.",
+        "publication_date": "2023-10-27T12:00:00Z",
+        "views": 0,
+        "category": 6,
+        "slug": "tsapli-otkryli-shkolu-iskusstv",
+        "tags": [
+            17,
+            18,
+            19,
+            20
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 28,
+    "fields": {
+        "title": "Ибисы открыли музыкальную школу",
+        "content": "В парке A ибисы открыли музыкальную школу. Ученики довольны.",
+        "publication_date": "2023-10-28T12:00:00Z",
+        "views": 0,
+        "category": 7,
+        "slug": "ibisy-otkryli-muzykalnuyu-shkolu",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 29,
+    "fields": {
+        "title": "Совы открыли библиотеку",
+        "content": "В лесу Рейкьявик совы открыли библиотеку. Читатели довольны.",
+        "publication_date": "2023-10-29T12:00:00Z",
+        "views": 240,
+        "category": 1,
+        "slug": "29-sovy-otkryli-biblioteku",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 30,
+    "fields": {
+        "title": "Олени открыли ресторан",
+        "content": "В городе Акурейри олени открыли ресторан. Посетители довольны.",
+        "publication_date": "2023-10-30T12:00:00Z",
+        "views": 270,
+        "category": 2,
+        "slug": "30-oleni-otkryli-restoran",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 31,
+    "fields": {
+        "title": "Лоси открыли кафе",
+        "content": "В лесу Хёвюдборгарсвёйтюр лоси открыли кафе. Посетители довольны.",
+        "publication_date": "2023-10-31T12:00:00Z",
+        "views": 200,
+        "category": 3,
+        "slug": "31-losi-otkryli-kafe",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 32,
+    "fields": {
+        "title": "Волки открыли спортзал",
+        "content": "В городе Кеблавик волки открыли спортзал. Посетители довольны.",
+        "publication_date": "2023-11-01T12:00:00Z",
+        "views": 230,
+        "category": 4,
+        "slug": "32-volki-otkryli-sportzal",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 33,
+    "fields": {
+        "title": "Лисы открыли музей",
+        "content": "В деревне Вестманнаэйяр лисы открыли музей. Посетители довольны.",
+        "publication_date": "2023-11-02T12:00:00Z",
+        "views": 250,
+        "category": 5,
+        "slug": "33-lisy-otkryli-muzey",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 34,
+    "fields": {
+        "title": "Белки открыли магазин",
+        "content": "В парке Селтьяднарнес белки открыли магазин. Покупатели довольны.",
+        "publication_date": "2023-11-03T12:00:00Z",
+        "views": 220,
+        "category": 6,
+        "slug": "34-belki-otkryli-magazin",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 35,
+    "fields": {
+        "title": "Зайцы открыли библиотеку",
+        "content": "В лесу Хабнарфьордюр зайцы открыли библиотеку. Читатели довольны.",
+        "publication_date": "2023-11-04T12:00:00Z",
+        "views": 260,
+        "category": 7,
+        "slug": "35-zaytsy-otkryli-biblioteku",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 36,
+    "fields": {
+        "title": "Ежики открыли музей",
+        "content": "В городе Рейкьявик ежики открыли музей. Посетители довольны.",
+        "publication_date": "2023-11-05T12:00:00Z",
+        "views": 210,
+        "category": 1,
+        "slug": "36-ezhiki-otkryli-muzey",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 37,
+    "fields": {
+        "title": "Кроты открыли ресторан",
+        "content": "В лесу Акурейри кроты открыли ресторан. Посетители довольны.",
+        "publication_date": "2023-11-06T12:00:00Z",
+        "views": 240,
+        "category": 2,
+        "slug": "37-kroty-otkryli-restoran",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 38,
+    "fields": {
+        "title": "Летучие мыши открыли кинотеатр",
+        "content": "В городе Хёвюдборгарсвёйтюр летучие мыши открыли кинотеатр. Зрители довольны.",
+        "publication_date": "2023-11-07T12:00:00Z",
+        "views": 270,
+        "category": 3,
+        "slug": "38-letuchie-myshi-otkryli-kinoteatr",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 39,
+    "fields": {
+        "title": "Пауки открыли спортзал",
+        "content": "В лесу Вестманнаэйяр пауки открыли спортзал. Посетители довольны.",
+        "publication_date": "2023-11-08T12:00:00Z",
+        "views": 200,
+        "category": 4,
+        "slug": "39-pauki-otkryli-sportzal",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 40,
+    "fields": {
+        "title": "Жабы открыли кафе",
+        "content": "В городе Селтьяднарнес жабы открыли кафе. Посетители довольны.",
+        "publication_date": "2023-11-09T12:00:00Z",
+        "views": 230,
+        "category": 5,
+        "slug": "40-zhaby-otkryli-kafe",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 41,
+    "fields": {
+        "title": "Утки открыли салон красоты",
+        "content": "В парке Хабнарфьордюр утки открыли салон красоты. Клиенты довольны.",
+        "publication_date": "2023-11-10T12:00:00Z",
+        "views": 250,
+        "category": 6,
+        "slug": "41-utki-otkryli-salon-krasoty",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 42,
+    "fields": {
+        "title": "Гуси открыли фитнес-центр",
+        "content": "В городе Рейкьявик гуси открыли фитнес-центр. Посетители довольны.",
+        "publication_date": "2023-11-11T12:00:00Z",
+        "views": 220,
+        "category": 7,
+        "slug": "42-gusi-otkryli-fitnes-tsentr",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 43,
+    "fields": {
+        "title": "Лебеди открыли спа-салон",
+        "content": "В озере Акурейри лебеди открыли спа-салон. Клиенты довольны.",
+        "publication_date": "2023-11-12T12:00:00Z",
+        "views": 260,
+        "category": 1,
+        "slug": "43-lebedi-otkryli-spa-salon",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 44,
+    "fields": {
+        "title": "Фламинго открыли танцевальную студию",
+        "content": "В парке Хёвюдборгарсвёйтюр фламинго открыли танцевальную студию. Посетители довольны.",
+        "publication_date": "2023-11-13T12:00:00Z",
+        "views": 200,
+        "category": 2,
+        "slug": "44-flamingo-otkryli-tantsevalnuyu-studiyu",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 45,
+    "fields": {
+        "title": "Пеликаны открыли йога-студию",
+        "content": "В городе Кеблавик пеликаны открыли йога-студию. Посетители довольны.",
+        "publication_date": "2023-11-14T12:00:00Z",
+        "views": 230,
+        "category": 3,
+        "slug": "45-pelikany-otkryli-yoga-studiyu",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 46,
+    "fields": {
+        "title": "Аисты открыли детский сад",
+        "content": "В деревне Вестманнаэйяр аисты открыли детский сад. Родители довольны.",
+        "publication_date": "2023-11-15T12:00:00Z",
+        "views": 250,
+        "category": 4,
+        "slug": "46-aisty-otkryli-detskiy-sad",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 47,
+    "fields": {
+        "title": "Цапли открыли школу искусств",
+        "content": "В городе Селтьяднарнес цапли открыли школу искусств. Ученики довольны.",
+        "publication_date": "2023-11-16T12:00:00Z",
+        "views": 220,
+        "category": 5,
+        "slug": "47-tsapli-otkryli-shkolu-iskusstv",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 48,
+    "fields": {
+        "title": "Ибисы открыли музыкальную школу",
+        "content": "В парке Хабнарфьордюр ибисы открыли музыкальную школу. Ученики довольны.",
+        "publication_date": "2023-11-17T12:00:00Z",
+        "views": 260,
+        "category": 6,
+        "slug": "48-ibisy-otkryli-muzykalnuyu-shkolu",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 49,
+    "fields": {
+        "title": "Совы открыли библиотеку",
+        "content": "В лесу Рейкьявик совы открыли библиотеку. Читатели довольны.",
+        "publication_date": "2023-11-18T12:00:00Z",
+        "views": 210,
+        "category": 7,
+        "slug": "49-sovy-otkryli-biblioteku",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 50,
+    "fields": {
+        "title": "Олени открыли ресторан",
+        "content": "В городе Акурейри олени открыли ресторан. Посетители довольны.",
+        "publication_date": "2023-11-19T12:00:00Z",
+        "views": 240,
+        "category": 1,
+        "slug": "50-oleni-otkryli-restoran",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 51,
+    "fields": {
+        "title": "Лоси открыли кафе",
+        "content": "В лесу Хёвюдборгарсвёйтюр лоси открыли кафе. Посетители довольны.",
+        "publication_date": "2023-11-20T12:00:00Z",
+        "views": 270,
+        "category": 2,
+        "slug": "51-losi-otkryli-kafe",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 52,
+    "fields": {
+        "title": "Волки открыли спортзал",
+        "content": "В городе Кеблавик волки открыли спортзал. Посетители довольны.",
+        "publication_date": "2023-11-21T12:00:00Z",
+        "views": 200,
+        "category": 3,
+        "slug": "52-volki-otkryli-sportzal",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 53,
+    "fields": {
+        "title": "Лисы открыли музей",
+        "content": "В деревне Вестманнаэйяр лисы открыли музей. Посетители довольны.",
+        "publication_date": "2023-11-22T12:00:00Z",
+        "views": 230,
+        "category": 4,
+        "slug": "53-lisy-otkryli-muzey",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 54,
+    "fields": {
+        "title": "Белки открыли магазин",
+        "content": "В парке Селтьяднарнес белки открыли магазин. Покупатели довольны.",
+        "publication_date": "2023-11-23T12:00:00Z",
+        "views": 250,
+        "category": 5,
+        "slug": "54-belki-otkryli-magazin",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 55,
+    "fields": {
+        "title": "Зайцы открыли библиотеку",
+        "content": "В лесу Хабнарфьордюр зайцы открыли библиотеку. Читатели довольны.",
+        "publication_date": "2023-11-24T12:00:00Z",
+        "views": 220,
+        "category": 6,
+        "slug": "55-zaytsy-otkryli-biblioteku",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 56,
+    "fields": {
+        "title": "Ежики открыли музей",
+        "content": "В городе Рейкьявик ежики открыли музей. Посетители довольны.",
+        "publication_date": "2023-11-25T12:00:00Z",
+        "views": 260,
+        "category": 7,
+        "slug": "56-ezhiki-otkryli-muzey",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 57,
+    "fields": {
+        "title": "Кроты открыли ресторан",
+        "content": "В лесу Акурейри кроты открыли ресторан. Посетители довольны.",
+        "publication_date": "2023-11-26T12:00:00Z",
+        "views": 210,
+        "category": 1,
+        "slug": "57-kroty-otkryli-restoran",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 58,
+    "fields": {
+        "title": "Летучие мыши открыли кинотеатр",
+        "content": "В городе Хёвюдборгарсвёйтюр летучие мыши открыли кинотеатр. Зрители довольны.",
+        "publication_date": "2023-11-27T12:00:00Z",
+        "views": 240,
+        "category": 2,
+        "slug": "58-letuchie-myshi-otkryli-kinoteatr",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 59,
+    "fields": {
+        "title": "Пауки открыли спортзал",
+        "content": "В лесу Вестманнаэйяр пауки открыли спортзал. Посетители довольны.",
+        "publication_date": "2023-11-28T12:00:00Z",
+        "views": 270,
+        "category": 3,
+        "slug": "59-pauki-otkryli-sportzal",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 60,
+    "fields": {
+        "title": "Жабы открыли кафе",
+        "content": "В городе Селтьяднарнес жабы открыли кафе. Посетители довольны.",
+        "publication_date": "2023-11-29T12:00:00Z",
+        "views": 200,
+        "category": 4,
+        "slug": "60-zhaby-otkryli-kafe",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 61,
+    "fields": {
+        "title": "Утки открыли салон красоты",
+        "content": "В парке Хабнарфьордюр утки открыли салон красоты. Клиенты довольны.",
+        "publication_date": "2023-11-30T12:00:00Z",
+        "views": 230,
+        "category": 5,
+        "slug": "61-utki-otkryli-salon-krasoty",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 62,
+    "fields": {
+        "title": "Гуси открыли фитнес-центр",
+        "content": "В городе Рейкьявик гуси открыли фитнес-центр. Посетители довольны.",
+        "publication_date": "2023-12-01T12:00:00Z",
+        "views": 250,
+        "category": 6,
+        "slug": "62-gusi-otkryli-fitnes-tsentr",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 63,
+    "fields": {
+        "title": "Лебеди открыли спа-салон",
+        "content": "В озере Акурейри лебеди открыли спа-салон. Клиенты довольны.",
+        "publication_date": "2023-12-02T12:00:00Z",
+        "views": 220,
+        "category": 7,
+        "slug": "63-lebedi-otkryli-spa-salon",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 64,
+    "fields": {
+        "title": "Фламинго открыли танцевальную студию",
+        "content": "В парке Хёвюдборгарсвёйтюр фламинго открыли танцевальную студию. Посетители довольны.",
+        "publication_date": "2023-12-03T12:00:00Z",
+        "views": 260,
+        "category": 1,
+        "slug": "64-flamingo-otkryli-tantsevalnuyu-studiyu",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 65,
+    "fields": {
+        "title": "Пеликаны открыли йога-студию",
+        "content": "В городе Кеблавик пеликаны открыли йога-студию. Посетители довольны.",
+        "publication_date": "2023-12-04T12:00:00Z",
+        "views": 210,
+        "category": 2,
+        "slug": "65-pelikany-otkryli-yoga-studiyu",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 66,
+    "fields": {
+        "title": "Аисты открыли детский сад",
+        "content": "В деревне Вестманнаэйяр аисты открыли детский сад. Родители довольны.",
+        "publication_date": "2023-12-05T12:00:00Z",
+        "views": 240,
+        "category": 3,
+        "slug": "66-aisty-otkryli-detskiy-sad",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 67,
+    "fields": {
+        "title": "Цапли открыли школу искусств",
+        "content": "В городе Селтьяднарнес цапли открыли школу искусств. Ученики довольны.",
+        "publication_date": "2023-12-06T12:00:00Z",
+        "views": 270,
+        "category": 4,
+        "slug": "67-tsapli-otkryli-shkolu-iskusstv",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 68,
+    "fields": {
+        "title": "Ибисы открыли музыкальную школу",
+        "content": "В парке Хабнарфьордюр ибисы открыли музыкальную школу. Ученики довольны.",
+        "publication_date": "2023-12-07T12:00:00Z",
+        "views": 200,
+        "category": 5,
+        "slug": "68-ibisy-otkryli-muzykalnuyu-shkolu",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 69,
+    "fields": {
+        "title": "Совы открыли библиотеку",
+        "content": "В лесу Рейкьявик совы открыли библиотеку. Читатели довольны.",
+        "publication_date": "2023-12-08T12:00:00Z",
+        "views": 230,
+        "category": 6,
+        "slug": "69-sovy-otkryli-biblioteku",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 70,
+    "fields": {
+        "title": "Олени открыли ресторан",
+        "content": "В городе Акурейри олени открыли ресторан. Посетители довольны.",
+        "publication_date": "2023-12-09T12:00:00Z",
+        "views": 250,
+        "category": 7,
+        "slug": "70-oleni-otkryli-restoran",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 71,
+    "fields": {
+        "title": "Лоси открыли кафе",
+        "content": "В лесу Хёвюдборгарсвёйтюр лоси открыли кафе. Посетители довольны.",
+        "publication_date": "2023-12-10T12:00:00Z",
+        "views": 220,
+        "category": 1,
+        "slug": "71-losi-otkryli-kafe",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 72,
+    "fields": {
+        "title": "Волки открыли спортзал",
+        "content": "В городе Кеблавик волки открыли спортзал. Посетители довольны.",
+        "publication_date": "2023-12-11T12:00:00Z",
+        "views": 260,
+        "category": 2,
+        "slug": "72-volki-otkryli-sportzal",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 73,
+    "fields": {
+        "title": "Лисы открыли музей",
+        "content": "В деревне Вестманнаэйяр лисы открыли музей. Посетители довольны.",
+        "publication_date": "2023-12-12T12:00:00Z",
+        "views": 210,
+        "category": 3,
+        "slug": "73-lisy-otkryli-muzey",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 74,
+    "fields": {
+        "title": "Белки открыли магазин",
+        "content": "В парке Селтьяднарнес белки открыли магазин. Покупатели довольны.",
+        "publication_date": "2023-12-13T12:00:00Z",
+        "views": 240,
+        "category": 4,
+        "slug": "74-belki-otkryli-magazin",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 75,
+    "fields": {
+        "title": "Зайцы открыли библиотеку",
+        "content": "В лесу Хабнарфьордюр зайцы открыли библиотеку. Читатели довольны.",
+        "publication_date": "2023-12-14T12:00:00Z",
+        "views": 270,
+        "category": 5,
+        "slug": "75-zaytsy-otkryli-biblioteku",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 76,
+    "fields": {
+        "title": "Ежики открыли музей",
+        "content": "В городе Рейкьявик ежики открыли музей. Посетители довольны.",
+        "publication_date": "2023-12-15T12:00:00Z",
+        "views": 200,
+        "category": 6,
+        "slug": "76-ezhiki-otkryli-muzey",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 77,
+    "fields": {
+        "title": "Кроты открыли ресторан",
+        "content": "В лесу Акурейри кроты открыли ресторан. Посетители довольны.",
+        "publication_date": "2023-12-16T12:00:00Z",
+        "views": 230,
+        "category": 7,
+        "slug": "77-kroty-otkryli-restoran",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 78,
+    "fields": {
+        "title": "Летучие мыши открыли кинотеатр",
+        "content": "В городе Хёвюдборгарсвёйтюр летучие мыши открыли кинотеатр. Зрители довольны.",
+        "publication_date": "2023-12-17T12:00:00Z",
+        "views": 250,
+        "category": 1,
+        "slug": "78-letuchie-myshi-otkryli-kinoteatr",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 79,
+    "fields": {
+        "title": "Пауки открыли спортзал",
+        "content": "В лесу Вестманнаэйяр пауки открыли спортзал. Посетители довольны.",
+        "publication_date": "2023-12-18T12:00:00Z",
+        "views": 220,
+        "category": 2,
+        "slug": "79-pauki-otkryli-sportzal",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 80,
+    "fields": {
+        "title": "Жабы открыли кафе",
+        "content": "В городе Селтьяднарнес жабы открыли кафе. Посетители довольны.",
+        "publication_date": "2023-12-19T12:00:00Z",
+        "views": 260,
+        "category": 3,
+        "slug": "80-zhaby-otkryli-kafe",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 81,
+    "fields": {
+        "title": "Утки открыли салон красоты",
+        "content": "В парке Хабнарфьордюр утки открыли салон красоты. Клиенты довольны.",
+        "publication_date": "2023-12-20T12:00:00Z",
+        "views": 210,
+        "category": 4,
+        "slug": "81-utki-otkryli-salon-krasoty",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 82,
+    "fields": {
+        "title": "Гуси открыли фитнес-центр",
+        "content": "В городе Рейкьявик гуси открыли фитнес-центр. Посетители довольны.",
+        "publication_date": "2023-12-21T12:00:00Z",
+        "views": 240,
+        "category": 5,
+        "slug": "82-gusi-otkryli-fitnes-tsentr",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 83,
+    "fields": {
+        "title": "Лебеди открыли спа-салон",
+        "content": "В озере Акурейри лебеди открыли спа-салон. Клиенты довольны.",
+        "publication_date": "2023-12-22T12:00:00Z",
+        "views": 270,
+        "category": 6,
+        "slug": "83-lebedi-otkryli-spa-salon",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 84,
+    "fields": {
+        "title": "Фламинго открыли танцевальную студию",
+        "content": "В парке Хёвюдборгарсвёйтюр фламинго открыли танцевальную студию. Посетители довольны.",
+        "publication_date": "2023-12-23T12:00:00Z",
+        "views": 200,
+        "category": 7,
+        "slug": "84-flamingo-otkryli-tantsevalnuyu-studiyu",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 85,
+    "fields": {
+        "title": "Пеликаны открыли йога-студию",
+        "content": "В городе Кеблавик пеликаны открыли йога-студию. Посетители довольны.",
+        "publication_date": "2023-12-24T12:00:00Z",
+        "views": 230,
+        "category": 1,
+        "slug": "85-pelikany-otkryli-yoga-studiyu",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 86,
+    "fields": {
+        "title": "Аисты открыли детский сад",
+        "content": "В деревне Вестманнаэйяр аисты открыли детский сад. Родители довольны.",
+        "publication_date": "2023-12-25T12:00:00Z",
+        "views": 250,
+        "category": 2,
+        "slug": "86-aisty-otkryli-detskiy-sad",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 87,
+    "fields": {
+        "title": "Цапли открыли школу искусств",
+        "content": "В городе Селтьяднарнес цапли открыли школу искусств. Ученики довольны.",
+        "publication_date": "2023-12-26T12:00:00Z",
+        "views": 220,
+        "category": 3,
+        "slug": "87-tsapli-otkryli-shkolu-iskusstv",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 88,
+    "fields": {
+        "title": "Ибисы открыли музыкальную школу",
+        "content": "В парке Хабнарфьордюр ибисы открыли музыкальную школу. Ученики довольны.",
+        "publication_date": "2023-12-27T12:00:00Z",
+        "views": 260,
+        "category": 4,
+        "slug": "88-ibisy-otkryli-muzykalnuyu-shkolu",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 89,
+    "fields": {
+        "title": "Совы открыли библиотеку",
+        "content": "В лесу Рейкьявик совы открыли библиотеку. Читатели довольны.",
+        "publication_date": "2023-12-28T12:00:00Z",
+        "views": 210,
+        "category": 5,
+        "slug": "89-sovy-otkryli-biblioteku",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 90,
+    "fields": {
+        "title": "Олени открыли ресторан",
+        "content": "В городе Акурейри олени открыли ресторан. Посетители довольны.",
+        "publication_date": "2023-12-29T12:00:00Z",
+        "views": 240,
+        "category": 6,
+        "slug": "90-oleni-otkryli-restoran",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 91,
+    "fields": {
+        "title": "Лоси открыли кафе",
+        "content": "В лесу Хёвюдборгарсвёйтюр лоси открыли кафе. Посетители довольны.",
+        "publication_date": "2023-12-30T12:00:00Z",
+        "views": 270,
+        "category": 7,
+        "slug": "91-losi-otkryli-kafe",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 92,
+    "fields": {
+        "title": "Волки открыли спортзал",
+        "content": "В городе Кеблавик волки открыли спортзал. Посетители довольны.",
+        "publication_date": "2023-12-31T12:00:00Z",
+        "views": 200,
+        "category": 1,
+        "slug": "92-volki-otkryli-sportzal",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 93,
+    "fields": {
+        "title": "Лисы открыли музей",
+        "content": "В деревне Вестманнаэйяр лисы открыли музей. Посетители довольны.",
+        "publication_date": "2024-01-01T12:00:00Z",
+        "views": 230,
+        "category": 2,
+        "slug": "93-lisy-otkryli-muzey",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 94,
+    "fields": {
+        "title": "Белки открыли магазин",
+        "content": "В парке Селтьяднарнес белки открыли магазин. Покупатели довольны.",
+        "publication_date": "2024-01-02T12:00:00Z",
+        "views": 250,
+        "category": 3,
+        "slug": "94-belki-otkryli-magazin",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 95,
+    "fields": {
+        "title": "Зайцы открыли библиотеку",
+        "content": "В лесу Хабнарфьордюр зайцы открыли библиотеку. Читатели довольны.",
+        "publication_date": "2024-01-03T12:00:00Z",
+        "views": 220,
+        "category": 4,
+        "slug": "95-zaytsy-otkryli-biblioteku",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 96,
+    "fields": {
+        "title": "Ежики открыли музей",
+        "content": "В городе Рейкьявик ежики открыли музей. Посетители довольны.",
+        "publication_date": "2024-01-04T12:00:00Z",
+        "views": 260,
+        "category": 5,
+        "slug": "96-ezhiki-otkryli-muzey",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 97,
+    "fields": {
+        "title": "Кроты открыли ресторан",
+        "content": "В лесу Акурейри кроты открыли ресторан. Посетители довольны.",
+        "publication_date": "2024-01-05T12:00:00Z",
+        "views": 210,
+        "category": 6,
+        "slug": "97-kroty-otkryli-restoran",
+        "tags": [
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 98,
+    "fields": {
+        "title": "Летучие мыши открыли кинотеатр",
+        "content": "В городе Хёвюдборгарсвёйтюр летучие мыши открыли кинотеатр. Зрители довольны.",
+        "publication_date": "2024-01-06T12:00:00Z",
+        "views": 240,
+        "category": 7,
+        "slug": "98-letuchie-myshi-otkryli-kinoteatr",
+        "tags": [
+            9,
+            10,
+            11,
+            12
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 99,
+    "fields": {
+        "title": "Пауки открыли спортзал",
+        "content": "В лесу Вестманнаэйяр пауки открыли спортзал. Посетители довольны.",
+        "publication_date": "2024-01-07T12:00:00Z",
+        "views": 270,
+        "category": 1,
+        "slug": "99-pauki-otkryli-sportzal",
+        "tags": [
+            13,
+            14,
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "news.article",
+    "pk": 100,
+    "fields": {
+        "title": "Жабы открыли кафе",
+        "content": "В городе Селтьяднарнес жабы открыли кафе. Посетители довольны.",
+        "publication_date": "2024-01-08T12:00:00Z",
+        "views": 200,
+        "category": 2,
+        "slug": "100-zhaby-otkryli-kafe",
+        "tags": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "news.category",
+    "pk": 1,
+    "fields": {
+        "name": "Технологии"
+    }
+},
+{
+    "model": "news.category",
+    "pk": 2,
+    "fields": {
+        "name": "Наука"
+    }
+},
+{
+    "model": "news.category",
+    "pk": 3,
+    "fields": {
+        "name": "Спорт"
+    }
+},
+{
+    "model": "news.category",
+    "pk": 4,
+    "fields": {
+        "name": "Культура"
+    }
+},
+{
+    "model": "news.category",
+    "pk": 5,
+    "fields": {
+        "name": "Политика"
+    }
+},
+{
+    "model": "news.category",
+    "pk": 6,
+    "fields": {
+        "name": "Здоровье"
+    }
+},
+{
+    "model": "news.category",
+    "pk": 7,
+    "fields": {
+        "name": "Образование"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 1,
+    "fields": {
+        "name": "Технологии"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 2,
+    "fields": {
+        "name": "Инновации"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 3,
+    "fields": {
+        "name": "Наука"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 4,
+    "fields": {
+        "name": "Исследования"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 5,
+    "fields": {
+        "name": "Спорт"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 6,
+    "fields": {
+        "name": "Футбол"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 7,
+    "fields": {
+        "name": "Культура"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 8,
+    "fields": {
+        "name": "Искусство"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 9,
+    "fields": {
+        "name": "Политика"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 10,
+    "fields": {
+        "name": "Экономика"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 11,
+    "fields": {
+        "name": "Здоровье"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 12,
+    "fields": {
+        "name": "Медицина"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 13,
+    "fields": {
+        "name": "Образование"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 14,
+    "fields": {
+        "name": "Общество"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 15,
+    "fields": {
+        "name": "Экология"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 16,
+    "fields": {
+        "name": "Транспорт"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 17,
+    "fields": {
+        "name": "Туризм"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 18,
+    "fields": {
+        "name": "Мода"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 19,
+    "fields": {
+        "name": "Еда"
+    }
+},
+{
+    "model": "news.tag",
+    "pk": 20,
+    "fields": {
+        "name": "Музыка"
+    }
+}
+]
