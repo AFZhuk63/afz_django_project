@@ -31,6 +31,7 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,8 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'django_extensions',
     'debug_toolbar',
+
     'news',
 ]
 
@@ -92,6 +95,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
