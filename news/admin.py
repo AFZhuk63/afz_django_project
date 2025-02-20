@@ -26,13 +26,19 @@ class TagInline(admin.TabularInline):
 
 class ArticleAdmin(admin.ModelAdmin):
     # list_display отображает поля в таблице
-    list_display = ('title', 'category', 'publication_date', 'views', 'colored_status')
+    list_display = ('pk', 'title', 'category', 'publication_date', 'views', 'colored_status')
+    # list_display_links позволяет указать в качестве ссылок на объект другие поля
+    list_display_links = ('pk', 'title')
     # list_filter позволяет фильтровать по полям
     list_filter = ('category',)
+    # сортировка, возможна по нескольким полям, по возрастанию или по убыванию
+    ordering = ('category', '-is_active')
     # search_fields позволяет искать по полям
     search_fields = ('title', 'content')
     # actions позволяет выполнять действия над выбранными записями
     actions = (make_inactive, make_active)
+    list_per_page = 20
+    list_display_links = ('pk',)  # запятая в конце нужна, чтобы указать, что это кортеж
     # fields позволяет выбирать поля для редактирования (не fieldsets)
     # fields = ('title', 'category', 'content', 'tags', 'is_active')
 
