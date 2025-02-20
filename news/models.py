@@ -17,12 +17,13 @@ class ArticleManager(models.Manager):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, verbose_name='Категория')
 
     class Meta:
         db_table = 'Categories'  # без указания этого параметра, таблица в БД будет называться вида 'news_categorys'
         verbose_name = 'Категория'  # единственное число для отображения в админке
         verbose_name_plural = 'Категории'  # множественное число для отображения в админке
+        ordering = ['name']  # указывает порядок сортировки модели по умолчанию
 
     def __str__(self):
         return self.name
@@ -41,6 +42,10 @@ class Tag(models.Model):
 
 
 class Article(models.Model):
+    class Status(models.TextChoices):
+        UNCHECKED = '0', 'не проверенно'
+        CHECKED = '1', 'проверено'
+
     title = models.CharField(max_length=255, verbose_name='Заголовок')
     content = models.TextField(verbose_name='Содержание')
     publication_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
@@ -49,6 +54,10 @@ class Article(models.Model):
     tags = models.ManyToManyField('Tag', related_name='article', verbose_name='Теги')
     slug = models.SlugField(unique=True, blank=True, verbose_name='Слаг')
     is_active = models.BooleanField(default=True, verbose_name='Активна')
+
+    status = models.BooleanField(default=0,
+                                 choices=(map(lambda x: (bool(x[0]), x[1]), Status.choices)),
+                                 verbose_name='Проверено')
 
     objects = ArticleManager()
     all_objects = AllArticleManager()
@@ -64,6 +73,18 @@ class Article(models.Model):
         # Сохраняем статью снова, чтобы обновить слаг
         super().save(*args, **kwargs)
         print(f"Saved article with slug: {self.slug}")  # Отладочное сообщение
+
+    class Meta:
+        db_table = 'Articles'  # без указания этого параметра, таблица в БД будет называться 'news_artcile'
+        verbose_name = 'Статья'  # единственное число для отображения в админке
+        verbose_name_plural = 'Статьи'  # множественное число для отображения в админке
+        # ordering = ['publication_date']  # указывает порядок сортировки модели по умолчанию
+        # unique_together = (...)  # устанавливает уникальность для комбинации полей
+        # index_together = (...)  # создаёт для нескольких полей
+        # indexes = (...)  # определяет пользовательские индексы
+        # abstract = True/False  # делает модель абстрактной, не создаёт таблицу БД, нужна только для наследования другими моделями данных
+        # managed = True/False  # будет ли эта модель управляться (создание, удаление, изменение) с помощью Django или нет
+        # permissions = [...]  # определяет пользовательские разрешения для модели
 
     def __str__(self):
         return self.title
