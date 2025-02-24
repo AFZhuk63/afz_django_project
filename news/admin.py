@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.contrib.admin import SimpleListFilter
+
 from .models import Article, Category, Tag
 
 
@@ -47,6 +48,10 @@ class ArticleAdmin(admin.ModelAdmin):
     # actions позволяет выполнять действия над выбранными записями
     actions = ('make_inactive', 'make_active', 'set_checked', 'set_unchecked')
     list_per_page = 20
+    # включение иерархического отображения по дате
+    date_hierarchy = 'publication_date'
+    # перенос кнопок сохранения в верхнюю часть формы
+    save_on_top = True # Добавили Дополнительную информацию 24.02.2025
     # fields позволяет выбирать поля для редактирования (не fieldsets)
     # fields = ('title', 'category', 'content', 'tags', 'is_active')
 
@@ -54,6 +59,7 @@ class ArticleAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Главная информация', {'fields': ('title', 'content')}),
         ('Дополнительные параметры', {'fields': ('category', 'tags', 'is_active')}),
+        ('Доп. инфо', {'fields': ('views', 'slug')}), # Добавили Дополнительную информацию 24.02.2025
     )
 
     # inlines позволяет добавлять дополнительные поля
