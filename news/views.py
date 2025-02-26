@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
 from .models import Article
+from bs4 import Tag
 
 
 """
@@ -23,7 +24,7 @@ info = {
          "url_name": "about"},
         {"title": "Каталог",
          "url": "/news/catalog/",
-         "url_name": "catalog"},
+         "url_name": "news:catalog"},
     ],
 }
 
@@ -43,6 +44,9 @@ def about(request):
 def catalog(request):
     return HttpResponse('Каталог новостей')
 
+def catalog_view(request):
+    # Ваши действия здесь
+    return render(request, 'news/catalog.html')
 
 def get_categories(request):
     """
@@ -70,39 +74,59 @@ def get_category_by_name(request, slug):
 
 
 def get_all_news(request):
+    """Функция для отображения страницы "Каталог"
+    будет возвращать рендер шаблона /templates/news/catalog.html
+    - **`sort`** - ключ для указания типа сортировки с возможными значениями: `publication_date`, `views`.
+    - **`order`** - опциональный ключ для указания направления сортировки с возможными значениями: `asc`, `desc`. По умолчанию `desc`.
+    1. Сортировка по дате добавления в убывающем порядке (по умолчанию): `/news/catalog/`
+    2. Сортировка по количеству просмотров в убывающем порядке: `/news/catalog/?sort=views`
+    3. Сортировка по количеству просмотров в возрастающем порядке: `/news/catalog/?sort=views&order=asc`
+    4. Сортировка по дате добавления в возрастающем порядке: `/news/catalog/?sort=publication_date&order=asc`
+    """
 
-    articles = Article.objects.select_related('category').prefetch_related('tags')
+    # считаем параметры из GET-запроса
+    sort = request.GET.get('sort', 'publication_date')  # по умолчанию сортируем по дате загрузки
+    order = request.GET.get('order', 'desc')  # по умолчанию сортируем по убыванию
 
-    info = {
-        'news': articles,
-        "users_count": 5,
-        "news_count": 10,
-        "menu": [
-            {"title": "Главная", "url": "/", "url_name": "index"},
-            {"title": "О проекте", "url": "/about/", "url_name": "about"},
-            {"title": "Каталог", "url": "/news/catalog/", "url_name": "catalog"},
-        ],
-    }
+    # Проверяем дали ли мы разрешение на сортировку по этому полю
+    valid_sort_fields = {'publication_date', 'views'}
+    if sort not in valid_sort_fields:
+        sort = 'publication_date'
 
-    return render(request, 'news/catalog.html', context=info)
+    # Обрабатываем направление сортировки
+    if order == 'asc':
+        order_by = sort
+    else:
+        order_by = f'-{sort}'
 
+    articles = Article.objects.select_related('category').prefetch_related('tags').order_by(order_by)
+
+    context = {**info, 'news': articles, 'news_count': len(articles), }
+
+    return render(request, 'news/catalog.html', context=context)
+
+# ✅ Представление для списка новостей, отфильтрованных по тегу
+
+def news_list_by_tag(request, tag_id):
+    """
+    Отображает страницу каталога с новостями, отфильтрованными по тегу.
+    """
+    tag = get_object_or_404(Tag, id=tag_id)  # Получаем тег или 404 ошибку
+    articles = Article.objects.filter(tags=tag)  # Фильтруем новости по тегу
+
+    context = {**info, 'news': articles, 'tag': tag, 'news_count': len(articles)}
+
+    return render(request, 'news/catalog.html', context=context)
 
 def get_detail_article_by_id(request, article_id):
     """
     Возвращает детальную информацию по новости для представления
     """
     article = get_object_or_404(Article, id=article_id)
-    info = {
-        'article': article,
-        "users_count": 5,
-        "news_count": 10,
-        "menu": [
-            {"title": "Главная", "url": "/", "url_name": "index"},
-            {"title": "О проекте", "url": "/about/", "url_name": "about"},
-            {"title": "Каталог", "url": "/news/catalog/", "url_name": "catalog"},
-        ],
-    }
-    return render(request, 'news/article_detail.html', context=info)
+
+    context = {**info, 'article': article}
+
+    return render(request, 'news/article_detail.html', context=context)
 
 
 def get_detail_article_by_title(request, title):
@@ -110,14 +134,7 @@ def get_detail_article_by_title(request, title):
     Возвращает детальную информацию по новости для представления
     """
     article = get_object_or_404(Article, slug=title)
-    info = {
-        'article': article,
-        "users_count": 5,
-        "news_count": 10,
-        "menu": [
-            {"title": "Главная", "url": "/", "url_name": "index"},
-            {"title": "О проекте", "url": "/about/", "url_name": "about"},
-            {"title": "Каталог", "url": "/news/catalog/", "url_name": "catalog"},
-        ],
-    }
-    return render(request, 'news/article_detail.html', context=info)
+
+    context = {**info, 'article': article}
+
+    return render(request, 'news/article_detail.html', context=context)

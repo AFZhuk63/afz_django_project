@@ -9,6 +9,7 @@ urlpatterns = [
     path('', views.main, name='index'),
     path('about/', views.about, name='about'),
     path('news/', include('news.urls', namespace='news')),
+    # path('news/', include('news.urls')),  # Убедитесь, что этот путь подключен
 ]
 
 if settings.DEBUG:
