@@ -1,25 +1,16 @@
-{#<!-- Краткое представление новости news/templates/include/article_preview.html -->#}
-{#<div class="card">#}
-{#    <div class="card-body">#}
-{#        <h5 class="card-title">#{{ article.id }}. {{ article.title }}</h5>#}
-{#        <p class="card-text">{{ article.content|truncatechars:50 }}</p>#}
-{#        <p class="card-text">{{ article.category }}</p>#}
-{#        {% for tag in article.tags.all %}#}
-{#            <span class="badge bg-info">{{ tag }}</span>#}
-{#        {% endfor %}#}
-{#        <p class="card-text">{{ article.publication_date }}</p>#}
-{#        <p class="card-text">{{ article.views }}</p>#}
-{#        <p class="card-text">{{ article.favorites_count }}</p>#}
-{#        <a href="{% url 'news:detail_article_by_id' article.id %}" class="btn btn-primary">Подробнее</a>#}
-{#    </div>#}
-{#</div>#}
 
 <!-- Краткое представление новости news/templates/include/article_preview.html -->
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">#{{ article.id }}. {{ article.title }}</h5>
+        <h5 class="card-title">{{ article.id }}. {{ article.title }}</h5>
         <p class="card-text">{{ article.content|truncatechars:50 }}</p>
         <p class="card-text">{{ article.category }}</p>
+        <!-- news/article_preview.html -->
+
+        <!-- Делаем category кликабельными -->
+            {% for category in article.categories.all %}
+              <a href="{% url 'news:category_news' category.id %}">{{ category.name }}</a>
+            {% endfor %}
 
         <!-- Делаем теги кликабельными -->
         <p class="card-text">
@@ -30,6 +21,7 @@
                 {% if not forloop.last %} {% endif %}
             {% endfor %}
         </p>
+
 
         <p class="card-text">{{ article.publication_date }}</p>
         <p class="card-text">Просмотров: {{ article.views }}</p>

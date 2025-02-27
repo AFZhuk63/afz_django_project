@@ -28,6 +28,11 @@
             <p class="card-text">{{ article.content }}</p>
             <p class="card-text">Категория: {{ article.category }}</p>
 
+            <!-- Делаем category кликабельными -->
+            {% for category in article.categories.all %}
+              <a href="{% url 'category_news' category.id %}">{{ category.name }}</a>
+            {% endfor %}
+
             <!-- ✅ Делаем теги кликабельными -->
             <p class="card-text">
                 Теги:

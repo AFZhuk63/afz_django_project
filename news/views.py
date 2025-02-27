@@ -1,8 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
-from .models import Article
-from bs4 import Tag
+from .models import Article, Category, Tag
 
 
 """
@@ -46,13 +45,26 @@ def catalog(request):
 
 def catalog_view(request):
     # Ваши действия здесь
-    return render(request, 'news/catalog.html')
+    articles = Article.objects.all()
+    context = {**info, 'news': articles, 'news_count': len(articles)}
+
+    return render(request, 'news/catalog.html', context=context)
+
 
 def get_categories(request):
     """
     Возвращает все категории для представления в каталоге
     """
     return HttpResponse('All categories')
+
+# Внести изменения по заданию 2
+# def category_news(request, category_id):
+#     category = get_object_or_404(Category, id=category_id)  # Получаем категорию по ID
+#     news_in_category = News.objects.filter(category=category)  # Фильтруем новости по категории
+#     return render(request, 'news/category_news.html', {
+#         'category': category,
+#         'news_in_category': news_in_category,
+#     })
 
 
 def get_news_by_category(request, slug):
@@ -100,22 +112,29 @@ def get_all_news(request):
         order_by = f'-{sort}'
 
     articles = Article.objects.select_related('category').prefetch_related('tags').order_by(order_by)
-
     context = {**info, 'news': articles, 'news_count': len(articles), }
-
     return render(request, 'news/catalog.html', context=context)
 
 # ✅ Представление для списка новостей, отфильтрованных по тегу
+
 
 def news_list_by_tag(request, tag_id):
     """
     Отображает страницу каталога с новостями, отфильтрованными по тегу.
     """
-    tag = get_object_or_404(Tag, id=tag_id)  # Получаем тег или 404 ошибку
+    tag = get_object_or_404(Tag, pk=tag_id)  # Получаем тег или 404 ошибку
     articles = Article.objects.filter(tags=tag)  # Фильтруем новости по тегу
-
     context = {**info, 'news': articles, 'tag': tag, 'news_count': len(articles)}
+    return render(request, 'news/catalog.html', context=context)
 
+
+def news_list_by_category(request, category_id):
+    """
+    Отображает страницу каталога с новостями, отфильтрованными по тегу.
+    """
+    category = get_object_or_404(Category, id=category_id)  # Получаем тег или 404 ошибку
+    articles = Article.objects.filter(category=category)  # Фильтруем новости по тегу
+    context = {**info, 'news': articles, 'category': category, 'news_count': len(articles)}
     return render(request, 'news/catalog.html', context=context)
 
 def get_detail_article_by_id(request, article_id):
@@ -123,9 +142,7 @@ def get_detail_article_by_id(request, article_id):
     Возвращает детальную информацию по новости для представления
     """
     article = get_object_or_404(Article, id=article_id)
-
     context = {**info, 'article': article}
-
     return render(request, 'news/article_detail.html', context=context)
 
 
@@ -134,7 +151,5 @@ def get_detail_article_by_title(request, title):
     Возвращает детальную информацию по новости для представления
     """
     article = get_object_or_404(Article, slug=title)
-
     context = {**info, 'article': article}
-
     return render(request, 'news/article_detail.html', context=context)
