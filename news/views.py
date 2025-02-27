@@ -55,16 +55,15 @@ def get_categories(request):
     """
     Возвращает все категории для представления в каталоге
     """
+
     return HttpResponse('All categories')
 
+
 # Внести изменения по заданию 2
-# def category_news(request, category_id):
-#     category = get_object_or_404(Category, id=category_id)  # Получаем категорию по ID
-#     news_in_category = News.objects.filter(category=category)  # Фильтруем новости по категории
-#     return render(request, 'news/category_news.html', {
-#         'category': category,
-#         'news_in_category': news_in_category,
-#     })
+def category_news(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    articles = Article.objects.filter(category=category)
+    return render(request, 'news/category_news.html', {'category': category, 'articles': articles})
 
 
 def get_news_by_category(request, slug):
