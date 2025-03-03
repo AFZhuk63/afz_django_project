@@ -12,5 +12,7 @@ urlpatterns = [
     path('catalog/<slug:title>/', views.get_detail_article_by_title, name='detail_article_by_title'),
     # ✅ Новый маршрут для фильтрации новостей по тегу
     path('tag/<int:tag_id>/', views.news_list_by_tag, name='news_by_tag'),
-    path('category/<int:category_id>/', views.news_list_by_category, name='category_news')
+    path('category/<int:category_id>/', views.news_list_by_category, name='category_news'),
+    # другие маршруты
+    path('search_news/', views.search_news, name='search_news'),
 ]
