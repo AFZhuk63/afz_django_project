@@ -5,7 +5,7 @@ app_name = 'news'  # Добавляем эту строку!
 # будет иметь префикс в urlах /news/
 urlpatterns = [
     path('', views.get_all_news),
-    path('catalog/', views.catalog_view, name='catalog'),
+    path('catalog/', views.get_all_news, name='catalog'),
     # path('catalog/', views.catalog, name='catalog'),
     path('catalog/<int:article_id>/', views.get_detail_article_by_id, name='detail_article_by_id'),
     # path('catalog/<slug:slug>/', views.get_category_by_name),

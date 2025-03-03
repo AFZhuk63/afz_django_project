@@ -47,7 +47,7 @@ class ArticleAdmin(admin.ModelAdmin):
     search_fields = ('title', 'content')
     # actions позволяет выполнять действия над выбранными записями
     actions = ('make_inactive', 'make_active', 'set_checked', 'set_unchecked')
-    list_per_page = 20
+    list_per_page = 15
     # включение иерархического отображения по дате
     date_hierarchy = 'publication_date'
     # перенос кнопок сохранения в верхнюю часть формы
