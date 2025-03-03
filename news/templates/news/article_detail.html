@@ -29,6 +29,7 @@
             <p class="card-text">Категория: {{ article.category }}</p>
 
             <!-- Делаем category кликабельными -->
+
             {% for category in article.categories.all %}
               <a href="{% url 'category_news' category.id %}">{{ category.name }}</a>
             {% endfor %}
@@ -51,3 +52,4 @@
         </div>
     </div>
 {% endblock %}
+<p>Просмотров: {{ article.views }}</p>
