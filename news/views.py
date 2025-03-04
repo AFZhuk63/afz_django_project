@@ -18,8 +18,10 @@ info = {
 def main(request):
     return render(request, 'main.html', context=info)
 
+
 def about(request):
     return render(request, 'about.html', context=info)
+
 
 def search_news(request):
     query = request.GET.get('q', '')
@@ -37,6 +39,7 @@ def search_news(request):
     categories = Category.objects.all()
     context = {**info, 'page_obj': page_obj, 'category': categories, 'news_count': paginator.count, 'query': query}
     return render(request, 'news/catalog.html', context)
+
 
 def get_all_news(request):
     """Каталог новостей с пагинацией и сортировкой"""
@@ -57,6 +60,7 @@ def get_all_news(request):
     context = {**info, 'page_obj': page_obj, 'category': categories, 'news_count': paginator.count}
     return render(request, 'news/catalog.html', context)
 
+
 def news_list_by_category(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     articles = Article.objects.filter(category=category)
@@ -68,6 +72,7 @@ def news_list_by_category(request, category_id):
     categories = Category.objects.all()
     context = {**info, 'page_obj': page_obj, 'category': categories, 'news_count': paginator.count}
     return render(request, 'news/catalog.html', context)
+
 
 def news_list_by_tag(request, tag_id):
     tag = get_object_or_404(Tag, pk=tag_id)
@@ -81,6 +86,7 @@ def news_list_by_tag(request, tag_id):
     context = {**info, 'page_obj': page_obj, 'category': categories, 'news_count': paginator.count}
     return render(request, 'news/catalog.html', context)
 
+
 def get_detail_article_by_id(request, article_id):
     article = get_object_or_404(Article, id=article_id)
 
@@ -90,6 +96,7 @@ def get_detail_article_by_id(request, article_id):
 
     context = {**info, 'article': article}
     return render(request, 'news/article_detail.html', context)
+
 
 def get_detail_article_by_title(request, title):
     article = get_object_or_404(Article, slug=title)
