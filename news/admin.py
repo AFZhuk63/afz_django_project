@@ -65,6 +65,8 @@ class ArticleAdmin(admin.ModelAdmin):
     # inlines позволяет добавлять дополнительные поля
     inlines = [TagInline]
 
+    readonly_fields = ('views', 'slug')
+
     def get_queryset(self, request):
         return Article.all_objects.get_queryset()
 
@@ -74,11 +76,11 @@ class ArticleAdmin(admin.ModelAdmin):
 
     # ВАЖНО! Убрал лишний отступ перед `@admin.action`, теперь все методы корректно оформлены
     @admin.action(description='Сделать неактивными выбранные статьи')
-    def make_inactive(self, request, queryset):
+    def make_inactive(modeladmin, request, queryset):
         queryset.update(is_active=False)
 
     @admin.action(description='Сделать активными выбранные статьи')
-    def make_active(self, request, queryset):
+    def make_active(modeladmin, request, queryset):
         queryset.update(is_active=True)  # исправлено (раньше ставился False)
 
     @admin.action(description='Отметить статьи как проверенные')
@@ -95,106 +97,3 @@ class ArticleAdmin(admin.ModelAdmin):
 admin.site.register(Category)
 admin.site.register(Tag)
 
-# from django.contrib import admin
-# from django.utils.html import format_html
-# from django.contrib.admin import SimpleListFilter
-# from django.urls import path
-# from django.shortcuts import redirect
-# from django.http import HttpRequest
-# from .models import Article, Category, Tag
-#
-#
-# class ArticleSpiderFilter(SimpleListFilter):
-#     title = 'Внутри пауки'
-#     parameter_name = 'has_spiders'
-#
-#     def lookups(self, request, model_admin):
-#         return (
-#             ('yes', "Есть"),
-#             ('no', 'Нет')
-#         )
-#
-#     def queryset(self, request, queryset):
-#         if self.value() == 'yes':
-#             return queryset.filter(content__contains='пауки')
-#         if self.value() == 'no':
-#             return queryset.exclude(content__contains='пауки')
-#         return queryset
-#
-#
-# class TagInline(admin.TabularInline):
-#     model = Article.tags.through
-#     extra = 1
-#
-#
-# class ArticleAdmin(admin.ModelAdmin):
-#     """Настройки для модели Article в админке"""
-#
-#     list_display = ('pk', 'title', 'category', 'publication_date', 'views', 'status', 'is_active', 'has_spiders')
-#     list_display_links = ('pk', 'title')
-#     list_filter = ('category', 'is_active', 'status', ArticleSpiderFilter)
-#     ordering = ('category', '-is_active')
-#     search_fields = ('title', 'content')
-#     actions = ('make_inactive', 'make_active', 'set_checked', 'set_unchecked')
-#     list_per_page = 20
-#     date_hierarchy = 'publication_date'
-#     save_on_top = True
-#
-#     fieldsets = (
-#         ('Главная информация', {'fields': ('title', 'content')}),
-#         ('Дополнительные параметры', {'fields': ('category', 'tags', 'is_active')}),
-#         ('Доп. инфо', {'fields': ('views', 'slug')}),
-#     )
-#
-#     inlines = [TagInline]
-#
-#     def get_queryset(self, request):
-#         return Article.all_objects.get_queryset()
-#
-#     @admin.display(description='Пауки внутри')
-#     def has_spiders(self, article):
-#         return 'Да' if 'пауки' in article.content else 'Нет'
-#
-#     @admin.action(description='Сделать неактивными выбранные статьи')
-#     def make_inactive(self, request, queryset):
-#         queryset.update(is_active=False)
-#
-#     @admin.action(description='Сделать активными выбранные статьи')
-#     def make_active(self, request, queryset):
-#         queryset.update(is_active=True)
-#
-#     @admin.action(description='Отметить статьи как проверенные')
-#     def set_checked(self, request, queryset):
-#         update = queryset.update(status=Article.Status.CHECKED)
-#         self.message_user(request, f'{update} статей было отмечено как проверенные')
-#
-#     @admin.action(description='Отметить статьи как не проверенные')
-#     def set_unchecked(self, request, queryset):
-#         update = queryset.update(status=Article.Status.UNCHECKED)
-#         self.message_user(request, f'{update} статей было отмечено как не проверенные', 'warning')
-#
-#
-# class CustomAdminSite(admin.AdminSite):
-#     """Кастомный сайт администрирования с доп. маршрутами"""
-#
-#     site_header = "Админка Info to Go"
-#     site_title = "Админка"
-#     index_title = "Привет, админ!"
-#
-#     def get_urls(self):
-#         urls = super().get_urls()
-#         custom_urls = [
-#             path('news/catalog/', self.admin_view(self.catalog_view), name='catalog_admin'),
-#         ]
-#         return custom_urls + urls
-#
-#     def catalog_view(self, request: HttpRequest):
-#         """Перенаправляем /admin/news/catalog/ на клиентскую версию каталога"""
-#         return redirect('/news/catalog/')
-#
-#
-# admin_site = CustomAdminSite(name='custom_admin')
-#
-# admin_site.register(Article, ArticleAdmin)
-# admin_site.register(Category)
-# admin_site.register(Tag)
