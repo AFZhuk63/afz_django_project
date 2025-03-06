@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Избранные новости</h2>
+<ul>
+    {% for favorite in favorites %}
+        <li>
+            <a href="{% url 'news:detail_article_by_id' favorite.article.id %}">
+                {{ favorite.article.title }}
+            </a>
+        </li>
+    {% empty %}
+        <p>У вас нет избранных новостей.</p>
+    {% endfor %}
+</ul>
+{% endblock %}

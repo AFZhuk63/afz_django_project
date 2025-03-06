@@ -8,29 +8,16 @@
 
 {% block content %}
     <h1 class="text-center mb-4">Каталог новостей Info to Go</h1>
-    <p class="text-center">Всего новостей: {{ news_count }}</p>
-    <p class="text-center">Всего пользователей: {{ users_count }}</p>
-    <div class="row">
-        {% for article in page_obj %}
-            <div class="col-md-4">
-                {% include "include/article_preview.html" with article=article %}
-            </div>
-        {% endfor %}
-    </div>
+{#    <p class="text-center">Всего новостей: {{ news_count }}</p>#}
+{#    <p class="text-center">Всего пользователей: {{ users_count }}</p>#}
+   <div class="row">
+        {% include "include/paginator.html" with page=page_obj %}
 
-    <!-- Пагинация -->
-    <div class="pagination mt-4 text-center">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1" class="btn btn-primary">&laquo; Первая</a>
-                <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-primary">Предыдущая</a>
-            {% endif %}
-            <span class="current">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.</span>
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}" class="btn btn-primary">Следующая</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-primary">Последняя &raquo;</a>
-            {% endif %}
-        </span>
+        {% for article in page_obj %}
+            {% include "include/article_preview.html" with article=article %}
+        {% endfor %}
+
+        {% include "include/paginator.html" with page=page_obj %}
     </div>
 {% endblock %}
 

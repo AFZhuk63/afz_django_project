@@ -1,10 +1,15 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
-from .models import Article, Category, Tag, News, Like
+from .models import Article, Category, Tag, News, Like, Favorite
 from django.db.models import F
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+import logging
+
+logger = logging.getLogger(__name__)
 
 info = {
     "users_count": 5,
@@ -118,15 +123,32 @@ def news_list_by_tag(request, tag_id):
     context = {**info, 'page_obj': page_obj, 'news_count': len(articles), 'page_obj': page_obj, }  # стало
     return render(request, 'news/catalog.html', context)
 
+
 def get_detail_article_by_id(request, article_id):
     article = get_object_or_404(Article, id=article_id)
 
     # Увеличиваем счетчик просмотров
     Article.objects.filter(pk=article_id).update(views=F('views') + 1)
-    article.refresh_from_db()  # Обновить объект article из базы данных
+    article.refresh_from_db()  # Обновляем объект article из базы
 
-    context = {**info, 'article': article}
+    # Проверяем, добавлена ли статья в избранное пользователем
+    is_favorite = False
+    if request.user.is_authenticated:
+        is_favorite = article.favorites.filter(user=request.user).exists()  # Используем 'favorites' вместо 'favorited_by'
+
+    # Получаем всех пользователей, добавивших статью в избранное
+    favorited_by = article.favorites.all()  # Используем 'favorites' вместо 'favorited_by'
+
+    # Формируем контекст
+    context = {
+        'article': article,
+        'is_favorite': is_favorite,
+        'favorited_by': favorited_by  # Передаем список пользователей в контекст
+    }
+
+    # Рендерим шаблон article_detail.html
     return render(request, 'news/article_detail.html', context)
+
 
 def get_detail_article_by_title(request, title):
     article = get_object_or_404(Article, slug=title)
@@ -148,3 +170,35 @@ def toggle_like(request, article_id):
         liked = True
 
     return JsonResponse({'liked': liked, 'like_count': article.likes.count()})
+
+
+def favorites(request):
+    ip_address = request.META.get('REMOTE_ADDR')
+    favorite_articles = Article.objects.filter(favorites__ip_address=ip_address)
+    context = {**info, 'news': favorite_articles, 'news_count': len(favorite_articles), 'page_obj': favorite_articles, 'user_ip': request.META.get('REMOTE_ADDR'), }
+    return render(request, 'news/catalog.html', context=context)
+
+
+@login_required
+def toggle_favorite(request, article_id):
+    try:
+        article = Article.objects.get(id=article_id)
+    except Article.DoesNotExist:
+        return JsonResponse({'error': 'Article not found'}, status=404)
+    favorite, created = Favorite.objects.get_or_create(user=request.user, article=article)
+
+    if not created:
+        favorite.delete()
+        is_favorite = False
+    else:
+        is_favorite = True
+
+    return JsonResponse({'is_favorite': is_favorite})
+
+@login_required
+def favorites_list(request):
+    favorites = Favorite.objects.filter(user=request.user).select_related('article')
+    return render(request, 'news/favorites.html', {'favorites': favorites})
+
+
+

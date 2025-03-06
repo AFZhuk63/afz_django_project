@@ -8,4 +8,9 @@
             <li class="nav-item"><hr class="dropdown-divider"/></li>
         {% endif %}
     {% endfor %}
+
+    <!-- Вкладка "Избранное" должна быть добавлена после основного меню -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'news:favorites' %}">Избранное</a>
+    </li>
 </ul>

@@ -1,13 +1,13 @@
 import unidecode
 from django.db import models
 from django.utils.text import slugify
-from django.utils import timezone
 from django.contrib.auth.models import User
 
 
 class AllArticleManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset()
+
 
 class ArticleManager(models.Manager):
     def get_queryset(self):
@@ -34,7 +34,7 @@ class News(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    publication_date = models.DateTimeField(auto_now_add=True) # Добавлено поле publication_date
+    publication_date = models.DateTimeField(auto_now_add=True)  # Добавлено поле publication_date
 
     def __str__(self):
         return self.title
@@ -58,6 +58,11 @@ class Article(models.Model):
     views = models.IntegerField(default=0)
     publication_date = models.DateTimeField(auto_now_add=True)  # Добавлено поле publication_date
 
+    @property
+    def favorited_by(self):
+        return User.objects.filter(favorites__article=self)
+
+
     class Status(models.TextChoices):
         UNCHECKED = '0', 'Не проверено'
         CHECKED = '1', 'Проверено'
@@ -69,8 +74,8 @@ class Article(models.Model):
         verbose_name="Проверено"
     )
 
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, default=1, verbose_name='Категория')
-    tags = models.ManyToManyField('Tag', related_name='articles', verbose_name='Теги')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1, verbose_name='Категория')
+    tags = models.ManyToManyField(Tag, related_name='articles', verbose_name='Теги')
     slug = models.SlugField(unique=True, blank=True, verbose_name='Слаг')
     is_active = models.BooleanField(default=True, verbose_name='Активна')
 
@@ -96,12 +101,24 @@ class Article(models.Model):
 
 
 class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes', default=1)
-    ip_address = models.GenericIPAddressField()
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
+    ip_address = models.GenericIPAddressField()
 
     class Meta:
-        unique_together = ('user', 'article', 'ip_address')
+        unique_together = ('user', 'article')
 
     def __str__(self):
-        return f"{self.ip_address} - {self.article.title}"
+        return f"{self.user.username} -> {self.article.title}"
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='favorites')  # Исправлено related_name
+
+    class Meta:
+        unique_together = ('user', 'article')
+
+    def __str__(self):
+        return f"{self.user.username} -> {self.article.title}"
+

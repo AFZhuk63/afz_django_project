@@ -16,4 +16,6 @@ urlpatterns = [
     # другие маршруты
     path('search_news/', views.search_news, name='search_news'),
     path('toggle_like/<int:article_id>/', views.toggle_like, name='toggle_like'),
+    path('toggle_favorite/<int:article_id>/', views.toggle_favorite, name='toggle_favorite'),  # Новый маршрут
+    path('favorites/', views.favorites_list, name='favorites'),  # Страница "Избранное"
 ]
