@@ -6,8 +6,9 @@ from django.db.models import F
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 import logging
+from .forms import ArticleForm
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +95,7 @@ def get_all_news(request):
     # context = {**info, 'page_obj': page_obj, 'category': categories, 'news_count': paginator.count}
     context = {**info, 'page_obj': page_obj, 'news_count': len(articles), 'page_obj': page_obj, }  # стало
     return render(request, 'news/catalog.html', context)
+
 
 def news_list_by_category(request, category_id):
     category = get_object_or_404(Category, id=category_id)
@@ -201,4 +203,23 @@ def favorites_list(request):
     return render(request, 'news/favorites.html', {'favorites': favorites})
 
 
+def add_article(request):
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            # собираем данные формы
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            category = form.cleaned_data['category']
+            # сохраняем статью в базу данных
+            article = Article(title=title, content=content, category=category)
+            article.save()
+            # получаем id созданной статьи
+            article_id = article.pk
+            return HttpResponseRedirect(f'/news/catalog/{article_id}')
+    else:
+        form = ArticleForm()
 
+    context = {'form': form, 'menu': info['menu']}
+
+    return render(request, 'news/add_article.html', context=context)
