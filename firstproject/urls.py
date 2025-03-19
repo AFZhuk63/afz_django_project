@@ -1,3 +1,4 @@
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
@@ -6,11 +7,10 @@ from news import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.main, name='index'),
-    path('about/', views.about, name='about'),
-    path('news/', include('news.urls', namespace='news')),
-    # path('news/', include('news.urls')),  # Убедитесь, что этот путь подключен
-]
+    path('', views.MainView.as_view(), name='index'),
+    path('about/', views.AboutView.as_view(), name='about'),
+    path('news/', include('news.urls', namespace='news')),# Убедитесь, что этот путь подключен
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar

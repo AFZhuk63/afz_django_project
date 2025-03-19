@@ -1,22 +1,23 @@
 from django.urls import path
 from . import views
+from news.views import GetAllNewsViews
 
-app_name = 'news'  # Добавляем эту строку!
+app_name = 'news'
+
 # будет иметь префикс в urlах /news/
 urlpatterns = [
-    # path('', views.get_all_news),
-    path('catalog/', views.get_all_news, name='catalog'),
-    # path('catalog/', views.catalog, name='catalog'),
-    path('catalog/<int:article_id>/', views.get_detail_article_by_id, name='detail_article_by_id'),
-    # path('catalog/<slug:slug>/', views.get_category_by_name),
-    path('catalog/<slug:title>/', views.get_detail_article_by_title, name='detail_article_by_title'),
-    # ✅ Новый маршрут для фильтрации новостей по тегу
-    path('tag/<int:tag_id>/', views.news_list_by_tag, name='news_by_tag'),
-    path('category/<int:category_id>/', views.news_list_by_category, name='category_news'),
-    # другие маршруты
-    path('search_news/', views.search_news, name='search_news'),
-    path('toggle_like/<int:article_id>/', views.toggle_like, name='toggle_like'),
-    path('toggle_favorite/<int:article_id>/', views.toggle_favorite, name='toggle_favorite'),  # Новый маршрут
-    path('favorites/', views.favorites_list, name='favorites'),  # Страница "Избранное"
-    path('add/', views.add_article, name='add_article')
+    path('catalog/', views.GetAllNewsViews.as_view(), name='catalog'),
+    path('catalog/<int:pk>/', views.ArticleDetailView.as_view(), name='detail_article_by_id'),
+    path('catalog/<slug:slug>/', views.ArticleDetailView.as_view(), name='detail_article_by_slag'),
+    path('tag/<int:tag_id>/', views.GetNewsByTagView.as_view(), name='get_news_by_tag'),
+    path('category/<int:category_id>/', views.GetNewsByCategoryView.as_view(), name='get_news_by_category'),
+    path('search/', views.SearchNewsView.as_view(), name='search_news'),
+    path('like/<int:article_id>/', views.ToggleLikeView.as_view(), name='toggle_like'),
+    path('favorite/<int:article_id>/', views.ToggleFavoriteView.as_view(), name='toggle_favorite'),
+    path('favorites/', views.FavoritesView.as_view(), name='favorites'),
+    path('add/', views.add_article, name='add_article'),
+    path('edit/<int:article_id>/', views.article_update, name='article_update'),
+    path('delete/<int:article_id>/', views.article_delete, name='article_delete'),
+    path('upload_json/', views.UploadJsonView.as_view(), name='upload_json'),
+    path('edit_article_from_json/<int:index>/', views.EditArticleFromJsonView.as_view(), name='edit_article_from_json'),
 ]

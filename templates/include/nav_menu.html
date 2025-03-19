@@ -1,4 +1,20 @@
-<!-- Меню вставлено через include в базовый шаблон-->
+{#<!-- Меню вставлено через include в базовый шаблон-->#}
+{#<ul class="navbar-nav">#}
+{#    {% for item in menu %}#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link" href="{% url item.url_name %}">{{ item.title }}</a>#}
+{#        </li>#}
+{#        {% if not forloop.last %}#}
+{#            <li class="nav-item"><hr class="dropdown-divider"/></li>#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+{##}
+{#    <!-- Вкладка "Избранное" должна быть добавлена после основного меню -->#}
+{#    <li class="nav-item">#}
+{#        <a class="nav-link" href="{% url 'news:favorites' %}">Избранное</a>#}
+{#    </li>#}
+{#</ul>#}
+
 <ul class="navbar-nav">
     {% for item in menu %}
         <li class="nav-item">
@@ -8,9 +24,4 @@
             <li class="nav-item"><hr class="dropdown-divider"/></li>
         {% endif %}
     {% endfor %}
-
-    <!-- Вкладка "Избранное" должна быть добавлена после основного меню -->
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'news:favorites' %}">Избранное</a>
-    </li>
 </ul>

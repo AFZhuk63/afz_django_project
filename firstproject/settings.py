@@ -76,13 +76,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'news.context_processors.categories_context',  # Добавляем наш контекст
+                #'news.context_processors.categories_context',  # Добавляем наш контекст
             ],
         },
     },
 ]
-
-
 
 WSGI_APPLICATION = 'firstproject.wsgi.application'
 
@@ -142,6 +140,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 JAZZMIN_SETTINGS = {
     "site_title": "Info to Go Admin",  # Заголовок административной панели
     "site_header": "ITG: Admin",  # Заголовок окна браузера
@@ -201,3 +200,6 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success"
     }
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

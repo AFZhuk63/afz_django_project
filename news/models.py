@@ -1,7 +1,7 @@
 import unidecode
+
 from django.db import models
 from django.utils.text import slugify
-from django.contrib.auth.models import User
 
 
 class AllArticleManager(models.Manager):
@@ -12,113 +12,103 @@ class AllArticleManager(models.Manager):
 class ArticleManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
-
     def sorted_by_title(self):
-        return self.get_queryset().order_by('-title')
+        return self.get_queryset().all().order_by('-title')
 
 
 class Category(models.Model):
     name = models.CharField(max_length=255, verbose_name='Категория')
 
-    class Meta:
-        db_table = 'Categories'
-        verbose_name = 'Категория'
-        verbose_name_plural = 'Категории'
-        ordering = ['name']
-
     def __str__(self):
         return self.name
 
-
-class News(models.Model):
-    title = models.CharField(max_length=200)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    publication_date = models.DateTimeField(auto_now_add=True)  # Добавлено поле publication_date
-
-    def __str__(self):
-        return self.title
-
+    class Meta:
+        db_table = 'Categories'  # без указания этого параметра, таблица в БД будет называться вида 'news_categorys'
+        verbose_name = 'Категория'  # единственное число для отображения в админке
+        verbose_name_plural = 'Категории'  # множественное число для отображения в админке
+        ordering = ['name']  # указывает порядок сортировки модели по умолчанию
 
 class Tag(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-
-    class Meta:
-        db_table = 'Tags'
-        verbose_name = 'Тег'
-        verbose_name_plural = 'Теги'
+    name = models.CharField(max_length=50, unique=True, verbose_name='Тег')
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        db_table = 'Tags'  # без указания этого параметра, таблица в БД будет называться вида 'news_tags'
+        verbose_name = 'Тег'  # единственное число для отображения в админке
+        verbose_name_plural = 'Теги'  # множественное число для отображения в админке
 
 
 class Article(models.Model):
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    views = models.IntegerField(default=0)
-    publication_date = models.DateTimeField(auto_now_add=True)  # Добавлено поле publication_date
+    class Status(models.IntegerChoices):
+        UNCHECKED = 0, 'не проверено'
+        CHECKED = 1, 'проверено'
 
-    @property
-    def favorited_by(self):
-        return User.objects.filter(favorites__article=self)
-
-
-    class Status(models.TextChoices):
-        UNCHECKED = '0', 'Не проверено'
-        CHECKED = '1', 'Проверено'
-
-    status = models.CharField(
-        max_length=1,
-        choices=Status.choices,
-        default=Status.UNCHECKED,
-        verbose_name="Проверено"
-    )
-
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1, verbose_name='Категория')
-    tags = models.ManyToManyField(Tag, related_name='articles', verbose_name='Теги')
+    title = models.CharField(max_length=255, verbose_name='Заголовок')
+    content = models.TextField(verbose_name='Содержание')
+    publication_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
+    views = models.IntegerField(default=0, verbose_name='Просмотры')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, default=1, verbose_name='Категория')
+    tags = models.ManyToManyField('Tag', related_name='article', verbose_name='Теги')
     slug = models.SlugField(unique=True, blank=True, verbose_name='Слаг')
     is_active = models.BooleanField(default=True, verbose_name='Активна')
+
+    status = models.BooleanField(default=0,
+                                 choices=(map(lambda x: (bool(x[0]), x[1]), Status.choices)),
+                                 verbose_name='Проверено')
+
+    image = models.ImageField(
+        upload_to='articles/%Y/%m/%d/',
+        blank=True,
+        null=True,
+        verbose_name='Изображение'
+    )
 
     objects = ArticleManager()
     all_objects = AllArticleManager()
 
-    def like_count(self):
-        return self.likes.count()
-
     def save(self, *args, **kwargs):
+        # Сохраняем статью, чтобы получить id
+        super().save(*args, **kwargs)
         if not self.slug:
             base_slug = slugify(unidecode.unidecode(self.title))
-            self.slug = base_slug
+            unique_slug = base_slug
+            num = 1
+            while Article.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{num}"
+                num += 1
+            self.slug = unique_slug
         super().save(*args, **kwargs)
 
-    class Meta:
-        db_table = 'Articles'
-        verbose_name = 'Статья'
-        verbose_name_plural = 'Статьи'
 
-    def __str__(self):
-        return self.title
+    class Meta:
+        db_table = 'Articles'  # без указания этого параметра, таблица в БД будет называться 'news_artcile'
+        verbose_name = 'Статья'  # единственное число для отображения в админке
+        verbose_name_plural = 'Статьи'  # множественное число для отображения в админке
+        # ordering = ['publication_date']  # указывает порядок сортировки модели по умолчанию
+        # unique_together = (...)  # устанавливает уникальность для комбинации полей
+        # index_together = (...)  # создаёт для нескольких полей
+        # indexes = (...)  # определяет пользовательские индексы
+        # abstract = True/False  # делает модель абстрактной, не создаёт таблицу БД, нужна только для наследования другими моделями данных
+        # managed = True/False  # будет ли эта модель управляться (создание, удаление, изменение) с помощью Django или нет
+        # permissions = [...]  # определяет пользовательские разрешения для модели
+
+    # def __str__(self):
+    #     return self.title
 
 
 class Like(models.Model):
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
     ip_address = models.GenericIPAddressField()
 
-    class Meta:
-        unique_together = ('user', 'article')
-
     def __str__(self):
-        return f"{self.user.username} -> {self.article.title}"
+        return f'Like by {self.ip_address} on {self.article}'
 
 
 class Favorite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='favorites')  # Исправлено related_name
-
-    class Meta:
-        unique_together = ('user', 'article')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='favorites')
+    ip_address = models.GenericIPAddressField()
 
     def __str__(self):
-        return f"{self.user.username} -> {self.article.title}"
-
+        return f'Favorite by {self.ip_address} on {self.article}'
