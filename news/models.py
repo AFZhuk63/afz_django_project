@@ -28,6 +28,7 @@ class Category(models.Model):
         verbose_name_plural = 'Категории'  # множественное число для отображения в админке
         ordering = ['name']  # указывает порядок сортировки модели по умолчанию
 
+
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name='Тег')
 
@@ -38,8 +39,8 @@ class Tag(models.Model):
         db_table = 'Tags'  # без указания этого параметра, таблица в БД будет называться вида 'news_tags'
         verbose_name = 'Тег'  # единственное число для отображения в админке
         verbose_name_plural = 'Теги'  # множественное число для отображения в админке
-
-
+#
+#
 class Article(models.Model):
     class Status(models.IntegerChoices):
         UNCHECKED = 0, 'не проверено'
@@ -67,7 +68,7 @@ class Article(models.Model):
 
     objects = ArticleManager()
     all_objects = AllArticleManager()
-
+#
     def save(self, *args, **kwargs):
         # Сохраняем статью, чтобы получить id
         super().save(*args, **kwargs)
@@ -94,10 +95,10 @@ class Article(models.Model):
         # managed = True/False  # будет ли эта модель управляться (создание, удаление, изменение) с помощью Django или нет
         # permissions = [...]  # определяет пользовательские разрешения для модели
 
-    # def __str__(self):
-    #     return self.title
+    def __str__(self):
+        return self.title
 
-
+#
 class Like(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
     ip_address = models.GenericIPAddressField()
@@ -112,3 +113,4 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f'Favorite by {self.ip_address} on {self.article}'
+
