@@ -458,34 +458,25 @@ def news_list_by_tag(request, tag_id):
 def get_detail_article_by_id(request, article_id):
     article = get_object_or_404(Article, id=article_id)
 
-    # Увеличиваем счетчик просмотров
-    Article.objects.filter(pk=article_id).update(views=F('views') + 1)
-    article.refresh_from_db()  # Обновляем объект article из базы
+    # Увеличиваем счетчик просмотров только один раз за сессию для каждой новости
+    viewed_articles = request.session.get('viewed_articles', [])
+    if article_id not in viewed_articles:
+        article.views += 1
+        article.save()
+        viewed_articles.append(article_id)
+        request.session['viewed_articles'] = viewed_articles
 
-    # Проверяем, добавлена ли статья в избранное пользователем
-    is_favorite = False
-    if request.user.is_authenticated:
-        is_favorite = article.favorites.filter(user=request.user).exists()  # Используем 'favorites' вместо 'favorited_by'
+    context = {**info, 'article': article}
 
-    # Получаем всех пользователей, добавивших статью в избранное
-    favorited_by = article.favorites.all()  # Используем 'favorites' вместо 'favorited_by'
-
-    # Формируем контекст
-    context = {
-        'article': article,
-        'is_favorite': is_favorite,
-        'favorited_by': favorited_by  # Передаем список пользователей в контекст
-    }
-
-    # Рендерим шаблон article_detail.html
+# Рендерим шаблон article_detail.html
     return render(request, 'news/article_detail.html', context)
 
 
 def get_detail_article_by_title(request, title):
     article = get_object_or_404(Article, slug=title)
 
-    context = {**info, 'article': article}
-    return render(request, 'news/article_detail.html', context)
+    context = {**info, 'article': article, 'user_ip': request.META.get('REMOTE_ADDR'), }
+    return render(request, 'news/article_detail.html', context=context)
 
 
 # @csrf_exempt

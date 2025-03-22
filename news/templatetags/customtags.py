@@ -6,7 +6,6 @@ from django import template
 
 from ..models import Favorite, Like
 
-
 register = template.Library()
 
 
