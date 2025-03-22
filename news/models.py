@@ -30,7 +30,7 @@ class Category(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name='Тег')
+    name = models.CharField(max_length=100, unique=True, verbose_name='Тег')
 
     def __str__(self):
         return self.name
@@ -73,7 +73,9 @@ class Article(models.Model):
         # Сохраняем статью, чтобы получить id
         super().save(*args, **kwargs)
         if not self.slug:
-            base_slug = slugify(unidecode.unidecode(self.title))
+            base_slug = slugify(unidecode.unidecode(self.title)) # чтобы у них был уникальный код
+            base_slug = "untitled"  # Установите значение по умолчанию (моя фантазия 22.03.25)
+            base_slug = base_slug[100] # Обрезаем slug до 100 символов (моя фантазия 22.03.25)
             unique_slug = base_slug
             num = 1
             while Article.objects.filter(slug=unique_slug).exists():

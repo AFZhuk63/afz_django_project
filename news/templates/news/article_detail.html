@@ -20,9 +20,9 @@
                     {% csrf_token %}
                     <button type="submit" class="btn btn-link p-0 text-black text-decoration-none">
                         {% if article|has_liked:user_ip %}
-                            <i class="bi bi-balloon-heart-fill"></i> {{ article.likes.count }}
+                            <i class="bi bi-hand-thumbs-up-fill"></i> {{ article.likes.count }}
                         {% else %}
-                            <i class="bi bi-balloon-heart"></i> {{ article.likes.count }}
+                            <i class="bi bi-hand-thumbs-up"></i> {{ article.likes.count }}
                         {% endif %}
                     </button>
                 </form>

@@ -1,18 +1,22 @@
 import json
 
+from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import F, Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, TemplateView
+from django.views.generic.base import ContextMixin
+from django.views.generic import CreateView, DeleteView, ListView, TemplateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 
 
 from .forms import ArticleForm, ArticleUploadForm
 from .models import Article, Favorite, Category, Like, Tag
-# from .models import Article, Category, Tag
+
 import unidecode
 from django.db import models
 from django.utils.text import slugify
@@ -42,9 +46,9 @@ info = {
         {"title": "Добавить статью",
          "url": "/news/add/",
          "url_name": "news:add_article"},
-        {"title": "Избранное",
-         "url": "/news/favorites/",
-         "url_name": "news:favorites"},
+        {"title": "Избранное", # добавлено в Lesson 19
+         "url": "/news/favorites/", # добавлено в Lesson 19
+         "url_name": "news:favorites"}, # добавлено в Lesson 19
     ],
 }
 
@@ -361,7 +365,7 @@ def article_update(request, article_id):
         form = ArticleForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
             form.save()
-            return redirect('news:detail_article_by_id', article_id=article.id)
+            return redirect('news:detail_article_by_id', pk=article.id)
     else:
         form = ArticleForm(instance=article)
     context = {'form': form, 'menu': info['menu'], 'article': article}
@@ -499,28 +503,12 @@ def toggle_like(request, article_id):
     return JsonResponse({'liked': liked, 'like_count': article.likes.count()})
 
 
-def favorites(request):
-    ip_address = request.META.get('REMOTE_ADDR')
-    favorite_articles = Article.objects.filter(favorites__ip_address=ip_address)
-    context = {**info, 'news': favorite_articles, 'news_count': len(favorite_articles), 'page_obj': favorite_articles, 'user_ip': request.META.get('REMOTE_ADDR'), }
-    return render(request, 'news/catalog.html', context=context)
+def favorites(request): # Lesson 19
+    ip_address = request.META.get('REMOTE_ADDR') # Lesson 19
+    favorite_articles = Article.objects.filter(favorites__ip_address=ip_address) # Lesson 19
+    context = {**info, 'news': favorite_articles, 'news_count': len(favorite_articles), 'page_obj': favorite_articles, 'user_ip': request.META.get('REMOTE_ADDR'), } # Lesson 19
+    return render(request, 'news/catalog.html', context=context) # Lesson 19
 
-
-# @login_required
-def toggle_favorite(request, article_id):
-    try:
-        article = Article.objects.get(id=article_id)
-    except Article.DoesNotExist:
-        return JsonResponse({'error': 'Article not found'}, status=404)
-    favorite, created = Favorite.objects.get_or_create(user=request.user, article=article)
-
-    if not created:
-        favorite.delete()
-        is_favorite = False
-    else:
-        is_favorite = True
-
-    return JsonResponse({'is_favorite': is_favorite})
 
 # @login_required
 def favorites_list(request):
