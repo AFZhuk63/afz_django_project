@@ -358,29 +358,23 @@ class AddArtilceView(CreateView):
             num += 1
         return unique_slug
 
-def article_update(request, article_id):
-    article = get_object_or_404(Article, pk=article_id)
 
-    if request.method == "POST":
-        form = ArticleForm(request.POST, request.FILES, instance=article)
-        if form.is_valid():
-            form.save()
-            return redirect('news:detail_article_by_id', pk=article.id)
-    else:
-        form = ArticleForm(instance=article)
-    context = {'form': form, 'menu': info['menu'], 'article': article}
-    return render(request, 'news/edit_article.html', context=context)
+class ArticleUpdateView(UpdateView):
+    model = Article
+    form_class = ArticleForm
+    template_name = 'news/edit_article.html'
+    context_object_name = 'article'
+
+    def get_success_url(self):
+        return reverse_lazy('news:detail_article_by_id', kwargs={'pk': self.object.pk})
 
 
-def article_delete(request, article_id):
-    article = get_object_or_404(Article, pk=article_id)
+class ArticleDeleteView(DeleteView):
+    model = Article
+    template_name = 'news/delete_article.html'
+    context_object_name = 'article'
+    success_url = reverse_lazy('news:catalog')
 
-    if request.method == "POST":
-        article.delete()
-        return redirect('news:catalog')
-
-    context = {'menu': info['menu'], 'article': article}
-    return render(request, 'news/delete_article.html', context=context)
 
 def search_news(request):
     query = request.GET.get('q', '')
