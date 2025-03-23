@@ -29,31 +29,38 @@ from django.utils.text import slugify
 """
 # Пример данных для новостей
 
-info = {
-    "users_count": 5,
-    "news_count": 10,
-    "categories": Category.objects.all(),
-    "menu": [
-        {"title": "Главная",
-         "url": "/",
-         "url_name": "index"},
-        {"title": "О проекте",
-         "url": "/about/",
-         "url_name": "about"},
-        {"title": "Каталог",
-         "url": "/news/catalog/",
-         "url_name": "news:catalog"},
-        {"title": "Добавить статью",
-         "url": "/news/add/",
-         "url_name": "news:add_article"},
-        {"title": "Избранное", # добавлено в Lesson 19
-         "url": "/news/favorites/", # добавлено в Lesson 19
-         "url_name": "news:favorites"}, # добавлено в Lesson 19
-    ],
-}
+class BaseMixin(ContextMixin):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                "users_count": 5,
+                "news_count": len(Article.objects.all()),
+                "categories": Category.objects.all(),
+                "menu": [
+                    {"title": "Главная",
+                     "url": "/",
+                     "url_name": "index"},
+                    {"title": "О проекте",
+                     "url": "/about/",
+                     "url_name": "about"},
+                    {"title": "Каталог",
+                     "url": "/news/catalog/",
+                     "url_name": "news:catalog"},
+                    {"title": "Добавить статью",
+                     "url": "/news/add/",
+                     "url_name": "news:add_article"},
+                    {"title": "Избранное",
+                     "url": "/news/favorites/",
+                     "url_name": "news:favorites"},
+                ],
+            }
+        )
+        return context
 
 
-class UploadJsonView(FormView):
+class UploadJsonView(BaseMixin, FormView):
+
     template_name = 'news/upload_json.html'
     form_class = ArticleUploadForm
     success_url = '/news/catalog/'
@@ -73,7 +80,7 @@ class UploadJsonView(FormView):
             return self.form_invalid(form)
 
 
-class EditArticleFromJsonView(FormView):
+class EditArticleFromJsonView(BaseMixin, FormView):
     template_name = 'news/edit_article_from_json.html'
     form_class = ArticleForm
 
@@ -155,49 +162,48 @@ def save_article(article_data, form=None):
     return article
 
 
-class FavoritesView(ListView):
+class FavoritesView(BaseMixin, ListView):
     model = Article
     template_name = 'news/catalog.html'
     context_object_name = 'news'
     paginate_by = 20
 
-    def get_queryset(self):
-        ip_address = self.request.META.get('REMOTE_ADDR')
-        return Article.objects.filter(favorites__ip_address=ip_address)
+    # def get_queryset(self):
+    #     ip_address = self.request.META.get('REMOTE_ADDR')
+    #     return Article.objects.filter(favorites__ip_address=ip_address)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(info)
         context['user_ip'] = self.request.META.get('REMOTE_ADDR')
         return context
 
 
-class ArticleDetailView(DetailView):
+class ArticleDetailView(BaseMixin, DetailView):
     model = Article
     template_name = 'news/article_detail.html'
     context_object_name = 'article'
 
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        article = self.get_object()
-
-        viewed_articles = request.session.get('viewed_articles', [])
-        if article.id not in viewed_articles:
-            article.views += 1
-            article.save()
-            viewed_articles.append(article.id)
-            request.session['viewed_articles'] = viewed_articles
-
-        return response
+    # def get(self, request, *args, **kwargs):
+    #     response = super().get(request, *args, **kwargs)
+    #     article = self.get_object()
+    #
+    #     viewed_articles = request.session.get('viewed_articles', [])
+    #     if article.id not in viewed_articles:
+    #         article.views += 1
+    #         article.save()
+    #         viewed_articles.append(article.id)
+    #         request.session['viewed_articles'] = viewed_articles
+    #
+    #     return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(info)
         context['user_ip'] = self.request.META.get('REMOTE_ADDR')
         return context
 
 
-class ToggleFavoriteView(View):
+class ToggleFavoriteView(BaseMixin, View):
+
     def post(self, request, article_id, *args, **kwargs):
         article = get_object_or_404(Article, pk=article_id)
         ip_address = request.META.get('REMOTE_ADDR')
@@ -217,7 +223,7 @@ class ToggleLikeView(View):
         return redirect('news:detail_article_by_id', pk=article_id)
 
 
-class SearchNewsView(ListView):
+class SearchNewsView(BaseMixin, ListView):
     model = Article
     template_name = 'news/catalog.html'
     context_object_name = 'news'
@@ -231,37 +237,24 @@ class SearchNewsView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(info)
         context['user_ip'] = self.request.META.get('REMOTE_ADDR')
         return context
 
 
-class MainView(TemplateView):
+class MainView(BaseMixin, TemplateView):
     template_name = 'main.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(info)
         context['user_ip'] = self.request.META.get('REMOTE_ADDR')
         return context
 
 
-class AboutView(TemplateView):
+class AboutView(BaseMixin, TemplateView):
     template_name = 'about.html'
 
 
-def catalog(request):
-    return HttpResponse('Каталог новостей')
-
-
-def get_categories(request):
-    """
-    Возвращает все категории для представления в каталоге
-    """
-    return HttpResponse('All categories')
-
-
-class GetNewsByTagView(ListView):
+class GetNewsByTagView(BaseMixin, ListView):
     model = Article
     template_name = 'news/catalog.html'
     context_object_name = 'news'
@@ -274,12 +267,11 @@ class GetNewsByTagView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(info)
         context['user_ip'] = self.request.META.get('REMOTE_ADDR')
         return context
 
 
-class GetNewsByCategoryView(ListView):
+class GetNewsByCategoryView(BaseMixin, ListView):
     model = Article
     template_name = 'news/catalog.html'
     context_object_name = 'news'
@@ -292,12 +284,11 @@ class GetNewsByCategoryView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(info)
         context['user_ip'] = self.request.META.get('REMOTE_ADDR')
         return context
 
 
-class GetAllNewsViews(ListView):
+class GetAllNewsViews(BaseMixin, ListView):
     model = Article
     template_name = 'news/catalog.html'
     context_object_name = 'news'
@@ -320,23 +311,11 @@ class GetAllNewsViews(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(info)
         context['user_ip'] = self.request.META.get('REMOTE_ADDR')
         return context
 
 
-def get_detail_article_by_title(request, title):
-    """
-    Возвращает детальную информацию по новости для представления
-    """
-    article = get_object_or_404(Article, slug=title)
-
-    context = {**info, 'article': article, 'user_ip': request.META.get('REMOTE_ADDR'),}
-
-    return render(request, 'news/article_detail.html', context=context)
-
-
-class AddArtilceView(CreateView):
+class AddArtilceView(BaseMixin, CreateView):
     model = Article
     form_class = ArticleForm
     template_name = 'news/add_article.html'
@@ -359,7 +338,7 @@ class AddArtilceView(CreateView):
         return unique_slug
 
 
-class ArticleUpdateView(UpdateView):
+class ArticleUpdateView(BaseMixin, UpdateView):
     model = Article
     form_class = ArticleForm
     template_name = 'news/edit_article.html'
@@ -369,7 +348,7 @@ class ArticleUpdateView(UpdateView):
         return reverse_lazy('news:detail_article_by_id', kwargs={'pk': self.object.pk})
 
 
-class ArticleDeleteView(DeleteView):
+class ArticleDeleteView(BaseMixin, DeleteView):
     model = Article
     template_name = 'news/delete_article.html'
     context_object_name = 'article'
