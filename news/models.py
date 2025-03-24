@@ -90,7 +90,6 @@ class Article(models.Model):
     tags = models.ManyToManyField('Tag', related_name='article', verbose_name='Теги')
     slug = models.SlugField(unique=True, blank=True, verbose_name='Слаг')
     is_active = models.BooleanField(default=True, verbose_name='Активна')
-
     status = models.BooleanField(default=0,
                                  choices=(map(lambda x: (bool(x[0]), x[1]), Status.choices)),
                                  verbose_name='Проверено')
