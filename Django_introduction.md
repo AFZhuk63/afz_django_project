@@ -39,8 +39,7 @@ django-admin startproject myproject
 В результате появится следующая структура каталогов:
 
 markdown
-Копировать
-Редактировать
+
 myproject/
 │── manage.py
 │── myproject/
@@ -67,8 +66,7 @@ python manage.py startapp myapp
 После этого появится новая директория myapp/ со структурой:
 
 markdown
-Копировать
-Редактировать
+
 myapp/
 │── migrations/
 │   │── __init__.py

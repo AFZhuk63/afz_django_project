@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
     'news',
-
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -205,3 +205,5 @@ JAZZMIN_UI_TWEAKS = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_URL = 'users:login'

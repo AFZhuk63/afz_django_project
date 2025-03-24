@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import F, Q
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
@@ -22,19 +22,12 @@ from django.db import models
 from django.utils.text import slugify
 
 
-"""
-Информация в шаблоны будет браться из базы данных
-Но пока, мы сделаем переменные, куда будем записывать информацию, которая пойдет в 
-контекст шаблона
-"""
-# Пример данных для новостей
-
 class BaseMixin(ContextMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(
             {
-                "users_count": 5,
+                "users_count": get_user_model().objects.count(),
                 "news_count": len(Article.objects.all()),
                 "categories": Category.objects.all(),
                 "menu": [
@@ -121,8 +114,8 @@ class ToggleLikeView(BaseToggleStatusView):
 
 
 class BaseJsonFormView(BaseMixin, FormView):
-    """Базовый класс для работы с JSON-файлами статей."""
 
+    """Базовый класс для работы с JSON-файлами статей."""
     def get_articles_data(self):
         return self.request.session.get('articles_data', [])
 
@@ -149,8 +142,8 @@ class UploadJsonView(BaseJsonFormView):
             errors = form.validate_json_data(data)
             if errors:
                 return self.form_invalid(form)
-            self.request.session['articles_data'] = data
-            self.request.session['current_index'] = 0
+            self.set_articles_data(data)
+            self.set_current_index(0)
             return redirect('news:edit_article_from_json', index=0)
         except json.JSONDecodeError:
             form.add_error(None, 'Неверный формат JSON-файла')
@@ -195,7 +188,6 @@ class EditArticleFromJsonView(BaseJsonFormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(info)
         index = self.kwargs['index']
         articles_data = self.get_articles_data()
         context['index'] = index
@@ -303,7 +295,7 @@ class GetAllNewsViews(BaseMixin, ListView):
         return context
 
 
-class AddArtilceView(BaseMixin, CreateView):
+class AddArtilceView(LoginRequiredMixin, BaseMixin, CreateView):
     model = Article
     form_class = ArticleForm
     template_name = 'news/add_article.html'
@@ -326,168 +318,20 @@ class AddArtilceView(BaseMixin, CreateView):
         return unique_slug
 
 
-class ArticleUpdateView(BaseMixin, UpdateView):
+class ArticleUpdateView(LoginRequiredMixin, BaseMixin, UpdateView):
     model = Article
     form_class = ArticleForm
     template_name = 'news/edit_article.html'
     context_object_name = 'article'
+    redirect_field_name = 'next'  # Имя параметра URL, используемого для перенаправления после успешного входа в систему
 
     def get_success_url(self):
         return reverse_lazy('news:detail_article_by_id', kwargs={'pk': self.object.pk})
 
 
-class ArticleDeleteView(BaseMixin, DeleteView):
+class ArticleDeleteView(LoginRequiredMixin, BaseMixin, DeleteView):
     model = Article
     template_name = 'news/delete_article.html'
     context_object_name = 'article'
     success_url = reverse_lazy('news:catalog')
-
-
-def search_news(request):
-    query = request.GET.get('q', '')
-    categories = Category.objects.all()
-    if query:
-        articles = Article.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
-    else:
-        articles = Article.objects.all()
-
-    paginator = Paginator(articles, 10)  # 10 новостей на страницу
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    # categories = Category.objects.all()
-    context = {**info, 'page_obj': page_obj, 'news_count': len(articles), 'page_obj': page_obj,} # It`s my variant
-    # context = {**info, 'news': articles, 'news_count': len(articles), 'page_obj': page_obj, } # It`s variant of Maks
-    return render(request, 'news/catalog.html', context)
-
-
-def get_all_news(request):
-    """Каталог новостей с пагинацией и сортировкой"""
-    sort = request.GET.get('sort', 'publication_date')
-    order = request.GET.get('order', 'desc')
-
-    valid_sort_fields = {'publication_date', 'views'}
-    if sort not in valid_sort_fields:
-        sort = 'publication_date'
-
-    # Обрабатываем направление сортировки
-    if order == 'asc':
-        order_by = sort
-    else:
-        order_by = f'-{sort}'
-
-    articles = Article.objects.select_related('category').prefetch_related('tags').order_by(order_by)
-
-    paginator = Paginator(articles, 10)  # 10 новостей на страницу
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    # categories = Category.objects.all()
-    # context = {**info, 'page_obj': page_obj, 'category': categories, 'news_count': paginator.count}
-    context = {**info, 'page_obj': page_obj, 'news_count': len(articles), 'page_obj': page_obj, }  # стало
-    return render(request, 'news/catalog.html', context)
-
-
-def news_list_by_category(request, category_id):
-    category = get_object_or_404(Category, id=category_id)
-    articles = Article.objects.filter(category=category)
-
-    paginator = Paginator(articles, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    # categories = Category.objects.all() # было
-    # context = {**info, 'page_obj': page_obj, 'category': categories, 'news_count': paginator.count}# было
-    context = {**info, 'page_obj': page_obj, 'news_count': len(articles), 'page_obj': page_obj,} # стало
-
-    return render(request, 'news/catalog.html', context)
-
-
-def news_list_by_tag(request, tag_id):
-    tag = get_object_or_404(Tag, pk=tag_id)
-    articles = Article.objects.filter(tags=tag)
-
-    paginator = Paginator(articles, 10) # Показывать 10 новостей на странице
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    # categories = Category.objects.all()
-    # context = {**info, 'page_obj': page_obj, 'category': categories, 'news_count': paginator.count}
-    context = {**info, 'page_obj': page_obj, 'news_count': len(articles), 'page_obj': page_obj, }  # стало
-    return render(request, 'news/catalog.html', context)
-
-
-def get_detail_article_by_id(request, article_id):
-    """
-      Возвращает детальную информацию по новости для представления
-    """
-    article = get_object_or_404(Article, id=article_id)
-
-    # Увеличиваем счетчик просмотров только один раз за сессию для каждой новости
-    viewed_articles = request.session.get('viewed_articles', [])
-    if article_id not in viewed_articles:
-        article.views += 1
-        article.save()
-        viewed_articles.append(article_id)
-        request.session['viewed_articles'] = viewed_articles
-
-    context = {**info, 'article': article}
-
-# Рендерим шаблон article_detail.html
-    return render(request, 'news/article_detail.html', context=context)
-
-
-def get_detail_article_by_title(request, title):
-    article = get_object_or_404(Article, slug=title)
-
-    context = {**info, 'article': article, 'user_ip': request.META.get('REMOTE_ADDR'), }
-    return render(request, 'news/article_detail.html', context=context)
-
-
-# @csrf_exempt
-def toggle_like(request, article_id):
-    article = get_object_or_404(Article, id=article_id)
-    ip_address = request.META.get('REMOTE_ADDR')
-    like, created = Like.objects.get_or_create(article=article, ip_address=ip_address)
-
-    if not created:
-        like.delete()
-        liked = False
-    else:
-        liked = True
-
-    return JsonResponse({'liked': liked, 'like_count': article.likes.count()})
-
-
-def favorites(request): # Lesson 19
-    ip_address = request.META.get('REMOTE_ADDR') # Lesson 19
-    favorite_articles = Article.objects.filter(favorites__ip_address=ip_address) # Lesson 19
-    context = {**info, 'news': favorite_articles, 'news_count': len(favorite_articles), 'page_obj': favorite_articles, 'user_ip': request.META.get('REMOTE_ADDR'), } # Lesson 19
-    return render(request, 'news/catalog.html', context=context) # Lesson 19
-
-
-# @login_required
-def favorites_list(request):
-    favorites = Favorite.objects.filter(user=request.user).select_related('article')
-    return render(request, 'news/favorites.html', {'favorites': favorites})
-
-
-def add_article(request):
-    if request.method == 'POST':
-        form = ArticleForm(request.POST)
-        if form.is_valid():
-            # собираем данные формы
-            title = form.cleaned_data['title']
-            content = form.cleaned_data['content']
-            category = form.cleaned_data['category']
-            # сохраняем статью в базу данных
-            article = Article(title=title, content=content, category=category)
-            article.save()
-            # получаем id созданной статьи
-            article_id = article.pk
-            return HttpResponseRedirect(f'/news/catalog/{article_id}')
-    else:
-        form = ArticleForm()
-
-    context = {'form': form, 'menu': info['menu']}
-
-    return render(request, 'news/add_article.html', context=context)
+    redirect_field_name = 'next'  # Имя параметра URL, используемого для перенаправления после успешного входа в систему

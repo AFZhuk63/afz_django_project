@@ -32,6 +32,8 @@
                 </button>
             </form>
         </p>
+         <p class="card-text"><i class="bi bi-person-fill"></i> {{ article.author|default:'Аноним' }}
+         </p>
         <a href="{% url 'news:detail_article_by_id' pk=article.id %}" class="btn btn-outline-secondary mt-2">Подробнее</a>
     </div>
 </div>
