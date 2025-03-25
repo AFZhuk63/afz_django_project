@@ -1,14 +1,14 @@
-<!-- Боковое меню с категориями -->
-<aside class="sidebar">
-    <h4>Категории</h4>
-    <ul class="list-group">
-        {% for category in categories %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="{% url 'news:category_news' category.id %}">{{ category.name }}</a>
-                <span class="badge bg-primary rounded-pill">{{ category.news_count }}</span>
-            </li>
-        {% empty %}
-            <li class="list-group-item">Нет доступных категорий</li>
-        {% endfor %}
-    </ul>
-</aside>
+{#<!-- Боковое меню с категориями -->#}
+{#<aside class="sidebar">#}
+{#    <h4>Категории</h4>#}
+{#    <ul class="list-group">#}
+{#        {% for category in categories %}#}
+{#            <li class="list-group-item d-flex justify-content-between align-items-center">#}
+{#                <a href="{% url 'news:category_news' category.id %}">{{ category.name }}</a>#}
+{#                <span class="badge bg-primary rounded-pill">{{ category.news_count }}</span>#}
+{#            </li>#}
+{#        {% empty %}#}
+{#            <li class="list-group-item">Нет доступных категорий</li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+{#</aside>#}
