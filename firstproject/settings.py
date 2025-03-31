@@ -210,8 +210,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_URL = 'users:login'
 
 
-# AUTHENTICATION_BACKENDS = [
-#     'django.contrib.auth.backends.ModelBackend',
-# ]  # стандартный бэкенд для аутентификации по username
+AUTHENTICATION_BACKENDS = [
+     'django.contrib.auth.backends.ModelBackend',
+]
+# стандартный бэкенд для аутентификации по username
 
 AUTHENTICATION_BACKENDS += ['users.authentication.EmailAuthBackend']
