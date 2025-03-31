@@ -37,7 +37,7 @@ class TagInline(admin.TabularInline):
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     # list_display отображает поля в таблице
-    list_display = ('pk', 'title', 'category', 'publication_date', 'views', 'status', 'is_active', 'has_spiders')
+    list_display = ('pk', 'title', 'category', 'publication_date', 'views', 'status', 'is_active', 'has_spiders', 'author')
     # list_display_links позволяет указать в качестве ссылок на объект другие поля
     list_display_links = ('pk',)
     # list_filter позволяет фильтровать по полям
@@ -59,7 +59,7 @@ class ArticleAdmin(admin.ModelAdmin):
     # fieldsets позволяет выбирать группы полей (не работает с fields)
     fieldsets = (
         ('Главная информация', {'fields': ('title', 'content')}),
-        ('Дополнительные параметры', {'fields': ('category', 'tags', 'is_active')}),
+        ('Дополнительные параметры', {'fields': ('category', 'tags', 'is_active', 'author')}),
         ('Доп. инфо', {'fields': ('views', 'slug')}), # Добавили Дополнительную информацию 24.02.2025
     )
 

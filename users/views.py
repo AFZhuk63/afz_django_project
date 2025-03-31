@@ -9,6 +9,7 @@ class CustomConfirmEmailView(BaseMixin, ConfirmEmailView):
 class CustomPasswordResetDoneView(BaseMixin, PasswordResetDoneView):
     template_name = 'account/password_reset_done.html'
 
+
 class CustomLoginView(BaseMixin, LoginView):
     template_name = 'account/login.html'
 
