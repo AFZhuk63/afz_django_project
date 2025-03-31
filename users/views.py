@@ -1,22 +1,25 @@
-from allauth.account.views import ConfirmEmailView
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, reverse
-from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView
-
-from .forms import CustomAuthenticationForm
+from allauth.account.views import (ConfirmEmailView, PasswordResetDoneView, PasswordResetFromKeyView,
+                                   PasswordResetFromKeyDoneView, PasswordResetView, LoginView, SignupView)
 from news.views import BaseMixin
 
+# Кастомные представления с BaseMixin
+class CustomConfirmEmailView(BaseMixin, ConfirmEmailView):
+    template_name = 'account/confirm_email.html'
 
-class LogoutUser(BaseMixin, LogoutView):
-    next_page = reverse_lazy('account_login')
+class CustomPasswordResetDoneView(BaseMixin, PasswordResetDoneView):
+    template_name = 'account/password_reset_done.html'
 
+class CustomLoginView(BaseMixin, LoginView):
+    template_name = 'account/login.html'
 
-    class CustomConfirmEmailView(ConfirmEmailView):
-        def get(self, *args, **kwargs):
-            response = super().get(*args, **kwargs)
-            if self.object.emailaddress_set.filter(verified=True).exists():
-                return redirect('account_login')
-            return response
+class CustomPasswordResetFromKeyView(BaseMixin, PasswordResetFromKeyView):
+    template_name = 'account/password_reset_from_key.html'
+
+class CustomPasswordResetFromKeyDoneView(BaseMixin, PasswordResetFromKeyDoneView):
+    template_name = 'account/password_reset_from_key_done.html'
+
+class CustomPasswordResetView(BaseMixin, PasswordResetView):
+    template_name = 'account/password_reset.html'
+
+class CustomSignupView(BaseMixin, SignupView):
+    template_name = 'account/signup.html'
