@@ -1,0 +1,60 @@
+/* styles_art_preview.css */
+
+/* Стили для карточки статьи */
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.card-body .flex-grow-1 {
+    flex-grow: 1;
+}
+
+/* Стили для контейнера изображения */
+.image-container {
+    height: 150px; /* Высота контейнера изображения */
+    width: 100%; /* Ширина контейнера */
+    overflow: hidden;
+    position: relative;
+}
+
+.image-container img {
+    object-fit: cover; /* Пропорциональное изменение изображения */
+    object-position: top; /* Выравнивание по верхнему краю */
+    width: 100%; /* Заполнение контейнера по ширине */
+    height: 100%; /* Заполнение контейнера по высоте */
+}
+
+/* Стили для кнопок и ссылок */
+.btn-outline-secondary {
+    margin-top: 1rem;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-muted;
+}
+
+.card-footer small {
+    font-size: 0.875rem;
+}
+
+/* Стили для тегов */
+.card-body a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-body a:hover {
+    text-decoration: underline;
+}
