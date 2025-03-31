@@ -10,7 +10,7 @@ urlpatterns = [
     path('', views.MainView.as_view(), name='index'),
     path('about/', views.AboutView.as_view(), name='about'),
     path('news/', include('news.urls', namespace='news')),# Убедитесь, что этот путь подключен
-    path('users/', include('users.urls', namespace='users')), # подключили урлы для users
+    #path('users/', include('users.urls', namespace='users')), # подключили урлы для users
     path('accounts/', include('allauth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
