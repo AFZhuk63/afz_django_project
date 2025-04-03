@@ -27,24 +27,49 @@
     </div>
     {% endif %}
 
-    <!-- Подвал -->
-    <div class="card-footer text-muted" style="grid-area: footer; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0.5rem;">
-        <div class="d-flex align-items-center" style="gap: 10px; font-size: 0.8rem;">
-            <small><i class="bi bi-calendar"></i> {{ article.publication_date }}</small>
+    <!-- Подвал с кнопками -->
+    <div class="card-footer text-muted" style="grid-area: footer; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0.5rem; flex-wrap: wrap;">
+        <!-- Левая группа: дата, просмотры, лайки -->
+        <div class="d-flex align-items-center" style="gap: 8px; font-size: 0.75rem;">
+            <small><i class="bi bi-calendar"></i> {{ article.publication_date|date:"d.m.Y" }}</small>
             <span><i class="bi bi-eye-fill"></i> {{ article.views }}</span>
-            <form method="POST" action="{% url 'news:toggle_like' article.id %}">
+
+            <!-- Лайки -->
+            <form method="POST" action="{% url 'news:toggle_like' article.id %}" class="d-inline">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-link p-0 text-black text-decoration-none">
+                <button type="submit" class="btn btn-link p-0 text-decoration-none">
                     {% if article|has_liked:user_ip %}
-                        <i class="bi bi-hand-thumbs-up-fill text-dark fs-6"></i> {{ article.likes.count }}
+                        <i class="bi bi-hand-thumbs-up-fill text-primary fs-6"></i>
                     {% else %}
-                        <i class="bi bi-hand-thumbs-up text-muted fs-6"></i> {{ article.likes.count }}
+                        <i class="bi bi-hand-thumbs-up text-muted fs-6"></i>
                     {% endif %}
+                    <span class="ms-1">{{ article.likes.count }}</span>
                 </button>
             </form>
-            <form method="POST" action="{% url 'news:toggle_favorite' article.id %}">
+
+            <!-- Дизлайки -->
+            <form method="POST" action="{% url 'news:toggle_dislike' article.id %}" class="d-inline">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-link p-0 text-black text-decoration-none">
+                <button type="submit" class="btn btn-link p-0 text-decoration-none">
+                    {% if article|has_disliked:user_ip %}
+                        <i class="bi bi-hand-thumbs-down-fill text-danger fs-6"></i>
+                    {% else %}
+                        <i class="bi bi-hand-thumbs-down text-muted fs-6"></i>
+                    {% endif %}
+                    <span class="ms-1">{{ article.dislikes.count }}</span>
+                </button>
+            </form>
+
+            <!-- Комментарии -->
+            <a href="{% url 'news:detail_article_by_id' article.id %}#comments" class="text-decoration-none text-muted">
+                <i class="bi bi-chat-left-text fs-6"></i>
+                <span class="ms-1">{{ article.comments.count }}</span>
+            </a>
+
+            <!-- Избранное -->
+            <form method="POST" action="{% url 'news:toggle_favorite' article.id %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link p-0 text-decoration-none">
                     {% if article|has_favorited:user_ip %}
                         <i class="bi bi-star-fill text-warning fs-6"></i>
                     {% else %}
@@ -53,8 +78,12 @@
                 </button>
             </form>
         </div>
-        <div class="d-flex align-items-center" style="gap: 10px;">
-            <p class="card-text mb-0" style="font-size: 0.8rem;"><i class="bi bi-person-fill"></i> {{ article.author|default:'Аноним' }}</p>
+
+        <!-- Правая группа: автор и кнопка -->
+        <div class="d-flex align-items-center" style="gap: 8px;">
+            <p class="card-text mb-0" style="font-size: 0.75rem;">
+                <i class="bi bi-person-fill"></i> {{ article.author|default:'Аноним' }}
+            </p>
             <a href="{% url 'news:detail_article_by_id' article.id %}" class="btn btn-outline-secondary btn-sm">Подробнее</a>
         </div>
     </div>

@@ -1,20 +1,22 @@
 import json
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import F, Q
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
+from django.views.decorators.http import require_POST
 from django.views.generic.base import ContextMixin
 from django.views.generic import CreateView, DeleteView, ListView, TemplateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 
-from .forms import ArticleForm, ArticleUploadForm
-from .models import Article, Favorite, Category, Like, Tag
+from .forms import ArticleForm, ArticleUploadForm, CommentForm
+from .models import Article, Favorite, Category, Like, Tag, Dislike, Comment
 
 import unidecode
 from django.db import models
@@ -111,6 +113,40 @@ class ToggleFavoriteView(BaseToggleStatusView):
 class ToggleLikeView(BaseToggleStatusView):
     model = Like
 
+
+class ToggleDislikeView(BaseToggleStatusView):
+    model = Dislike
+
+# @require_POST
+# def toggle_dislike(request, article_id):
+#     """Обработчик дизлайков"""
+#     article = get_object_or_404(Article, pk=article_id)
+#     ip_address = request.META.get('REMOTE_ADDR')
+#
+#     dislike, created = Dislike.objects.get_or_create(
+#         article=article,
+#         ip_address=ip_address,
+#         defaults={'article': article, 'ip_address': ip_address}
+#     )
+#
+#     if not created:
+#         dislike.delete()
+#
+#     return JsonResponse({
+#         'dislikes_count': article.dislikes.count(),
+#         'status': 'removed' if not created else 'added'
+#     })
+
+
+def get_comments_count(request, article_id):
+    """Получение количества комментариев"""
+    comments = Comment.objects.filter(article_id=article_id, is_active=True)
+    data = [{
+        'author': c.author.username,
+        'text': c.text,
+        'created_at': c.created_at.strftime("%d.%m.%Y %H:%M")
+    } for c in comments]
+    return JsonResponse(data, safe=False)
 
 class BaseJsonFormView(BaseMixin, FormView):
 
@@ -350,3 +386,18 @@ class ArticleDeleteView(LoginRequiredMixin, BaseMixin, DeleteView):
         if self.request.user.is_superuser or self.request.user.groups.filter(name="Moderator").exists():
             return qs
         return qs.filter(author=self.request.user)
+
+
+@login_required
+def add_comment(request, article_id):
+    article = get_object_or_404(Article, pk=article_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.article = article
+            comment.author = request.user
+            comment.save()
+    return redirect('news:detail_article_by_id', pk=article_id)
+
+

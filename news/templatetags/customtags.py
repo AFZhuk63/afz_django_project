@@ -4,7 +4,7 @@ import random
 from django.contrib.admin import register
 from django import template
 
-from ..models import Favorite, Like
+from ..models import Favorite, Like, Dislike
 
 
 register = template.Library()
@@ -13,6 +13,11 @@ register = template.Library()
 @register.filter(name='has_liked')
 def has_liked(article, ip_address):
     return Like.objects.filter(article=article, ip_address=ip_address).exists()
+
+
+@register.filter(name='has_disliked')
+def has_disliked(article, ip_address):
+    return article.dislikes.filter(ip_address=ip_address).exists()
 
 
 @register.filter(name='has_favorited')

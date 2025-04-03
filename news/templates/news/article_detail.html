@@ -8,6 +8,7 @@
                 <i class="bi bi-person-fill"></i> {{ article.author|default:'Аноним' }}
             </span>
             <h5 class="card-title">{{ article.title }}</h5>
+
             <!-- Изображение -->
             {% if article.image %}
             <div class="article-image mb-5">
@@ -17,61 +18,126 @@
                      loading="lazy">
             </div>
             {% endif %}
+
             <!-- Содержание -->
             <p class="card-text">{{ article.content }}</p>
-            <!-- Категория -->
+
+            <!-- Категория и теги -->
             <div class="article-taxonomy mb-3">
                 <a href="{% url 'news:get_news_by_category' article.category.id %}"
                    class="btn btn-sm btn-outline-primary">
                     <i class="bi bi-bookmark"></i> {{ article.category }}
                 </a>
+                {% for tag in article.tags.all %}
+                    <a href="{% url 'news:get_news_by_tag' tag.id %}" class="text-decoration-none" style="color: {{ tag|random_color }};">
+                        <i class="bi bi-hash"></i>{{ tag.name|upper }}
+                    </a>
+                {% endfor %}
             </div>
-            {% for tag in article.tags.all %}
-                <a href="{% url 'news:get_news_by_tag' tag.id %}" class="text-decoration-none" style="color: {{ tag|random_color }};"><i class="bi bi-hash"></i>{{ tag.name|upper }}</a>
-            {% endfor %}
-            <p class="card-text">{{ article.id_author }}</p>
-            <p class="card-text d-flex justify-content-between">
+
+            <!-- Мета-информация и действия -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
                 <small class="text-muted"><i class="bi bi-calendar"></i> {{ article.publication_date }}</small>
                 <span><i class="bi bi-eye-fill"></i> {{ article.views }}</span>
-        <!-- Лайки и избранное -->
-        <div class="article-actions border-top pt-4 mb-5">
-            <div class="d-flex gap-2 align-items-center">
-               <form method="POST" action="{% url 'news:toggle_like' article.id %}" class="d-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-link p-0 text-decoration-none">
-                        {% if article|has_liked:user_ip %}
-                            <i class="bi bi-hand-thumbs-up-fill text-dark fs-5"></i> {{ article.likes.count }}
-                        {% else %}
-                            <i class="bi bi-hand-thumbs-up text-muted fs-5"></i> {{ article.likes.count }}
-        {% endif %}
-    </button>
-</form>
-                <form method="POST" action="{% url 'news:toggle_favorite' article.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-link p-0 text-decoration-none">
-                        {% if article|has_favorited:user_ip %}
-                            <i class="bi bi-star-fill text-warning fs-5"></i>
-                        {% else %}
-                            <i class="bi bi-star text-muted fs-5"></i>
-                        {% endif %}
-                    </button>
-                </form>
             </div>
-        </div>
-            </p>
-        </div>
-    </div>
-           <!-- Кнопки управления -->
-        {% if article|can_edit:user %}
-            <div class="article-actions border-top pt-4">
-                <div class="d-flex gap-2">
-                    <a href="{% url 'news:article_update' article.id %}" class="btn btn-warning">
-                        <i class="bi bi-pencil-square"></i> Редактировать
-                    </a>
-                    <a href="{% url 'news:article_delete' article.id %}" class="btn btn-danger">
-                        <i class="bi bi-trash"></i> Удалить
+
+            <!-- Лайки, дизлайки, избранное -->
+            <div class="article-actions border-top pt-4 mb-4">
+                <div class="d-flex gap-3 align-items-center">
+                    <!-- Лайк -->
+                    <form method="POST" action="{% url 'news:toggle_like' article.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link p-0 text-decoration-none">
+                            {% if article|has_liked:user_ip %}
+                                <i class="bi bi-hand-thumbs-up-fill text-primary fs-5"></i> {{ article.likes.count }}
+                            {% else %}
+                                <i class="bi bi-hand-thumbs-up text-muted fs-5"></i> {{ article.likes.count }}
+                            {% endif %}
+                        </button>
+                    </form>
+
+                    <!-- Дизлайк -->
+                    <form method="POST" action="{% url 'news:toggle_dislike' article.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link p-0 text-decoration-none">
+                            {% if article|has_disliked:user_ip %}
+                                <i class="bi bi-hand-thumbs-down-fill text-danger fs-5"></i> {{ article.dislikes.count }}
+                            {% else %}
+                                <i class="bi bi-hand-thumbs-down text-muted fs-5"></i> {{ article.dislikes.count }}
+                            {% endif %}
+                        </button>
+                    </form>
+
+                    <!-- Избранное -->
+                    <form method="POST" action="{% url 'news:toggle_favorite' article.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link p-0 text-decoration-none">
+                            {% if article|has_favorited:user_ip %}
+                                <i class="bi bi-star-fill text-warning fs-5"></i>
+                            {% else %}
+                                <i class="bi bi-star text-muted fs-5"></i>
+                            {% endif %}
+                        </button>
+                    </form>
+
+                    <!-- Комментарии -->
+                    <a href="#comments" class="text-decoration-none text-muted">
+                        <i class="bi bi-chat-left-text fs-5"></i>
+                        <span id="comments-count">{{ article.comments.count }}</span>
                     </a>
                 </div>
             </div>
-        {% endif %}
+        </div>
+    </div>
+
+    <!-- Секция комментариев -->
+    <div class="card card-shadow mt-4" id="comments">
+        <div class="card-body">
+            <h5 class="card-title"><i class="bi bi-chat-square-text"></i> Комментарии</h5>
+
+            <!-- Форма добавления комментария -->
+            {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'news:add_comment' article.id %}" class="mb-4">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea name="text" class="form-control" rows="3" placeholder="Ваш комментарий..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Отправить</button>
+            </form>
+            {% else %}
+            <div class="alert alert-info">
+                <a href="{% url 'account_login' %}?next={{ request.path }}">Войдите</a>, чтобы оставить комментарий
+            </div>
+            {% endif %}
+
+            <!-- Список комментариев -->
+            <div class="comments-list">
+                {% for comment in article.comments.all %}
+                    <div class="comment mb-3 border-bottom pb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>{{ comment.author }}</strong>
+                            <small class="text-muted">{{ comment.created_at }}</small>
+                        </div>
+                        <p class="mb-0 mt-1">{{ comment.text }}</p>
+                    </div>
+                {% empty %}
+                    <p class="text-muted">Пока нет комментариев. Будьте первым!</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопки управления -->
+    {% if article|can_edit:user %}
+        <div class="article-actions border-top pt-4 mt-4">
+            <div class="d-flex gap-2">
+                <a href="{% url 'news:article_update' article.id %}" class="btn btn-warning">
+                    <i class="bi bi-pencil-square"></i> Редактировать
+                </a>
+                <a href="{% url 'news:article_delete' article.id %}" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Удалить
+                </a>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

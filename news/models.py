@@ -75,6 +75,8 @@ class Tag(models.Model):
         db_table = 'Tags'  # без указания этого параметра, таблица в БД будет называться вида 'news_tags'
         verbose_name = 'Тег'  # единственное число для отображения в админке
         verbose_name_plural = 'Теги'  # множественное число для отображения в админке
+
+
 #
 #
 class Article(models.Model):
@@ -107,14 +109,13 @@ class Article(models.Model):
     objects = ArticleManager()
     all_objects = AllArticleManager()
 
-
     def save(self, *args, **kwargs):
         # Сохраняем статью, чтобы получить id
         super().save(*args, **kwargs)
         if not self.slug:
-            base_slug = slugify(unidecode.unidecode(self.title)) # чтобы у них был уникальный код
+            base_slug = slugify(unidecode.unidecode(self.title))  # чтобы у них был уникальный код
             base_slug = "untitled"  # Установите значение по умолчанию (моя фантазия 22.03.25)
-            base_slug = base_slug[100] # Обрезаем slug до 100 символов (моя фантазия 22.03.25)
+            base_slug = base_slug[100]  # Обрезаем slug до 100 символов (моя фантазия 22.03.25)
             unique_slug = base_slug
             num = 1
             while Article.objects.filter(slug=unique_slug).exists():
@@ -122,7 +123,6 @@ class Article(models.Model):
                 num += 1
             self.slug = unique_slug
         super().save(*args, **kwargs)
-
 
     class Meta:
         db_table = 'Articles'  # без указания этого параметра, таблица в БД будет называться 'news_artcile'
@@ -139,6 +139,7 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+
 #
 class Like(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
@@ -148,10 +149,33 @@ class Like(models.Model):
         return f'Like by {self.ip_address} on {self.article}'
 
 
+class Dislike(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='dislikes')
+    ip_address = models.GenericIPAddressField()
+
+    def __str__(self):
+        return f'Dislike by {self.ip_address} on {self.article}'
+
+
+class Comment(models.Model):
+    article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    text = models.TextField(verbose_name='Текст комментария')
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+    def __str__(self):
+        return f"Комментарий {self.id} к статье #{self.article.id}"
+
+
 class Favorite(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='favorites')
     ip_address = models.GenericIPAddressField()
 
     def __str__(self):
         return f'Favorite by {self.ip_address} on {self.article}'
-
