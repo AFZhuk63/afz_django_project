@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Q
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 
 
 class ArticleQuerySet(models.QuerySet):
@@ -179,3 +180,27 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f'Favorite by {self.ip_address} on {self.article}'
+
+
+class UserAction(models.Model):
+    ACTION_CHOICES = [
+        ('article_create', 'Создание статьи'),
+        ('article_edit', 'Редактирование статьи'),
+        ('article_delete', 'Удаление статьи'),
+        ('comment_add', 'Добавление комментария'),
+        ('profile_update', 'Обновление профиля'),
+    ]
+
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    action_type = models.CharField(max_length=50, choices=ACTION_CHOICES)
+    description = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    metadata = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+        verbose_name = 'Действие пользователя'
+        verbose_name_plural = 'Действия пользователей'
+
+    def __str__(self):
+        return f"{self.user.username} - {self.get_action_type_display()} - {self.timestamp}"

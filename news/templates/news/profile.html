@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="profile-container">
+  <!-- Шапка профиля -->
+  <div class="profile-header card card-shadow mb-4">
+    <div class="card-body">
+      <div class="d-flex align-items-center">
+        <div class="avatar-container me-4">
+          <img src="{% static 'img/default-avatar.png' %}" alt="Аватар" class="profile-avatar rounded-circle">
+        </div>
+        <div>
+          <h2>{{ profile_user.get_full_name|default:profile_user.username }}</h2>
+          <p class="text-muted mb-1">@{{ profile_user.username }}</p>
+          <p class="text-muted mb-0">{{ profile_user.email }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Вкладки -->
+  <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">Информация</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="articles-tab" data-bs-toggle="tab" data-bs-target="#articles" type="button" role="tab">Мои статьи</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab">История действий</button>
+    </li>
+  </ul>
+
+  <!-- Содержимое вкладок -->
+  <div class="tab-content" id="profileTabsContent">
+    <!-- Вкладка информации -->
+    <div class="tab-pane fade show active" id="info" role="tabpanel">
+      <div class="card card-shadow">
+        <div class="card-body">
+          <div class="mb-3">
+            <h5 class="card-title">Основная информация</h5>
+            <p><strong>Имя пользователя:</strong> {{ profile_user.username }}</p>
+            <p><strong>Email:</strong> {{ profile_user.email }}</p>
+            <p><strong>Дата регистрации:</strong> {{ profile_user.date_joined|date:"d.m.Y" }}</p>
+          </div>
+          <div class="d-flex gap-2">
+            <a href="{% url 'account_change_password' %}" class="btn btn-primary">Изменить пароль</a>
+            <a href="{% url 'account_email' %}" class="btn btn-outline-secondary">Управление email</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Вкладка статей -->
+    <div class="tab-pane fade" id="articles" role="tabpanel">
+      <div class="card card-shadow">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title mb-0">Мои статьи</h5>
+            <a href="{% url 'news:add_article' %}" class="btn btn-primary btn-sm">Добавить статью</a>
+          </div>
+          
+          {% if user_articles %}
+            <div class="list-group">
+              {% for article in user_articles %}
+                <div class="list-group-item">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 class="mb-1">{{ article.title }}</h6>
+                      <small class="text-muted">
+                        {{ article.publication_date|date:"d.m.Y" }} | 
+                        Просмотры: {{ article.views }} | 
+                        Комментарии: {{ article.comments.count }}
+                      </small>
+                    </div>
+                    <div class="btn-group">
+                      <a href="{% url 'news:detail_article_by_id' article.id %}" class="btn btn-sm btn-outline-primary">Просмотр</a>
+                      <a href="{% url 'news:article_update' article.id %}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="alert alert-info">У вас пока нет статей.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Вкладка истории -->
+    <div class="tab-pane fade" id="history" role="tabpanel">
+      <div class="card card-shadow">
+        <div class="card-body">
+          <h5 class="card-title mb-3">История действий</h5>
+          
+          {% if user_actions %}
+            <div class="timeline">
+              {% for action in user_actions %}
+                <div class="timeline-item">
+                  <div class="timeline-icon">
+                    {% if action.action_type == "article_create" %}
+                      <i class="bi bi-file-earmark-plus"></i>
+                    {% elif action.action_type == "article_edit" %}
+                      <i class="bi bi-pencil-square"></i>
+                    {% elif action.action_type == "article_delete" %}
+                      <i class="bi bi-trash"></i>
+                    {% elif action.action_type == "comment_add" %}
+                      <i class="bi bi-chat-square-text"></i>
+                    {% else %}
+                      <i class="bi bi-person-circle"></i>
+                    {% endif %}
+                  </div>
+                  <div class="timeline-content">
+                    <p class="mb-1">{{ action.description }}</p>
+                    <small class="text-muted">{{ action.timestamp|date:"d.m.Y H:i" }}</small>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="alert alert-info">История действий пуста.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+  }
+  
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+  }
+  
+  .timeline-item {
+    position: relative;
+    padding-bottom: 20px;
+  }
+  
+  .timeline-icon {
+    position: absolute;
+    left: -30px;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .timeline-content {
+    padding-left: 15px;
+    border-left: 2px solid #dee2e6;
+  }
+  
+  .timeline-item:last-child .timeline-content {
+    border-left: 2px solid transparent;
+  }
+</style>
+{% endblock %}

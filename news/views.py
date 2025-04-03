@@ -16,7 +16,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 
 from .forms import ArticleForm, ArticleUploadForm, CommentForm
-from .models import Article, Favorite, Category, Like, Tag, Dislike, Comment
+from .models import Article, Favorite, Category, Like, Tag, Dislike, Comment, UserAction
 
 import unidecode
 from django.db import models
@@ -24,32 +24,32 @@ from django.utils.text import slugify
 
 
 class BaseMixin(ContextMixin):
+    def __init__(self):
+        self.request = None
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(
-            {
-                "users_count": get_user_model().objects.count(),
-                "news_count": len(Article.objects.all()),
-                "categories": Category.objects.all(),
-                "menu": [
-                    {"title": "Главная",
-                     "url": "/",
-                     "url_name": "index"},
-                    {"title": "О проекте",
-                     "url": "/about/",
-                     "url_name": "about"},
-                    {"title": "Каталог",
-                     "url": "/news/catalog/",
-                     "url_name": "news:catalog"},
-                    {"title": "Добавить статью",
-                     "url": "/news/add/",
-                     "url_name": "news:add_article"},
-                    {"title": "Избранное",
-                     "url": "/news/favorites/",
-                     "url_name": "news:favorites"},
-                ],
-            }
-        )
+        menu = [
+            {"title": "Главная", "url": "/", "url_name": "index"},
+            {"title": "О проекте", "url": "/about/", "url_name": "about"},
+            {"title": "Каталог", "url": "/news/catalog/", "url_name": "news:catalog"},
+            {"title": "Добавить статью", "url": "/news/add/", "url_name": "news:add_article"},
+            {"title": "Избранное", "url": "/news/favorites/", "url_name": "news:favorites"},
+        ]
+
+        if self.request.user.is_authenticated:
+            menu.append({
+                "title": f"Привет, {self.request.user.username}!",
+                "url": "/news/profile/",
+                "url_name": "news:profile"
+            })
+
+        context.update({
+            "users_count": get_user_model().objects.count(),
+            "news_count": Article.objects.count(),
+            "categories": Category.objects.all(),
+            "menu": menu,
+        })
         return context
 
 
@@ -117,26 +117,6 @@ class ToggleLikeView(BaseToggleStatusView):
 class ToggleDislikeView(BaseToggleStatusView):
     model = Dislike
 
-# @require_POST
-# def toggle_dislike(request, article_id):
-#     """Обработчик дизлайков"""
-#     article = get_object_or_404(Article, pk=article_id)
-#     ip_address = request.META.get('REMOTE_ADDR')
-#
-#     dislike, created = Dislike.objects.get_or_create(
-#         article=article,
-#         ip_address=ip_address,
-#         defaults={'article': article, 'ip_address': ip_address}
-#     )
-#
-#     if not created:
-#         dislike.delete()
-#
-#     return JsonResponse({
-#         'dislikes_count': article.dislikes.count(),
-#         'status': 'removed' if not created else 'added'
-#     })
-
 
 def get_comments_count(request, article_id):
     """Получение количества комментариев"""
@@ -147,6 +127,7 @@ def get_comments_count(request, article_id):
         'created_at': c.created_at.strftime("%d.%m.%Y %H:%M")
     } for c in comments]
     return JsonResponse(data, safe=False)
+
 
 class BaseJsonFormView(BaseMixin, FormView):
 
@@ -386,6 +367,25 @@ class ArticleDeleteView(LoginRequiredMixin, BaseMixin, DeleteView):
         if self.request.user.is_superuser or self.request.user.groups.filter(name="Moderator").exists():
             return qs
         return qs.filter(author=self.request.user)
+
+
+class UserProfileView(LoginRequiredMixin, BaseMixin, TemplateView):
+    template_name = 'news/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        # Информация о пользователе
+        context['profile_user'] = user
+
+        # Статьи пользователя
+        context['user_articles'] = Article.objects.filter(author=user).order_by('-publication_date')
+
+        # История действий
+        context['user_actions'] = UserAction.objects.filter(user=user).order_by('-timestamp')[:50]
+
+        return context
 
 
 @login_required
