@@ -116,7 +116,7 @@ class Article(models.Model):
         if not self.slug:
             base_slug = slugify(unidecode.unidecode(self.title))  # чтобы у них был уникальный код
             base_slug = "untitled"  # Установите значение по умолчанию (моя фантазия 22.03.25)
-            base_slug = base_slug[100]  # Обрезаем slug до 100 символов (моя фантазия 22.03.25)
+            base_slug = base_slug[:100]  # Обрезаем slug до 100 символов (моя фантазия 22.03.25)
             unique_slug = base_slug
             num = 1
             while Article.objects.filter(slug=unique_slug).exists():
@@ -149,6 +149,8 @@ class Like(models.Model):
     def __str__(self):
         return f'Like by {self.ip_address} on {self.article}'
 
+    class Meta:
+        unique_together = [['article', 'ip_address']]  # Для Like
 
 class Dislike(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='dislikes')
@@ -157,6 +159,8 @@ class Dislike(models.Model):
     def __str__(self):
         return f'Dislike by {self.ip_address} on {self.article}'
 
+    class Meta:
+        unique_together = [['article', 'ip_address']]  # Для Dislike
 
 class Comment(models.Model):
     article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='comments')
@@ -164,14 +168,20 @@ class Comment(models.Model):
     text = models.TextField(verbose_name='Текст комментария')
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
+    likes = models.ManyToManyField(get_user_model(), related_name='liked_comments', blank=True)
+    dislikes = models.ManyToManyField(get_user_model(), related_name='disliked_comments', blank=True)
+
+    def get_indent_level(self):
+        level = 0
+        parent = self.parent
+        while parent:
+            level += 1
+            parent = parent.parent
+        return level * 3
 
     class Meta:
-        ordering = ['-created_at']
-        verbose_name = 'Комментарий'
-        verbose_name_plural = 'Комментарии'
-
-    def __str__(self):
-        return f"Комментарий {self.id} к статье #{self.article.id}"
+        ordering = ['created_at']
 
 
 class Favorite(models.Model):

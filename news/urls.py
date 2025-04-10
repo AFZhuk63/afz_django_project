@@ -18,6 +18,9 @@ urlpatterns = [
     path('like/<int:article_id>/', views.ToggleLikeView.as_view(), name='toggle_like'),
     path('dislike/<int:article_id>/', views.ToggleDislikeView.as_view(), name='toggle_dislike'), # Добавлен маршрут для DisLike
     path('article/<int:article_id>/comment/', views.add_comment, name='add_comment'),  # Добавлен маршрут для комментариев
+    path('comment/<int:comment_id>/like/', views.like_comment, name='like_comment'),    #Добавлен маршрут для Like на комментариии комментария
+    path('comment/<int:comment_id>/dislike/', views.dislike_comment, name='dislike_comment'),#Добавлен маршрут для DisLike на комментариии комментария
+
     path('article/<int:article_id>/comments/count/', views.get_comments_count, name='get_comments_count'),
     path('favorite/<int:article_id>/', views.ToggleFavoriteView.as_view(), name='toggle_favorite'),
     path('favorites/', views.FavoritesView.as_view(), name='favorites'),

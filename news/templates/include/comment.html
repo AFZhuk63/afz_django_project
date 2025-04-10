@@ -1,0 +1,41 @@
+<div class="comment mb-3 ps-2 border-start border-secondary border-opacity-25 ms-{{ comment.get_indent_level }}">
+    <div class="d-flex justify-content-between">
+        <strong>{{ comment.author }}</strong>
+        <small class="text-muted">{{ comment.created_at }}</small>
+    </div>
+    <div class="mt-1">
+        <p class="mb-1">{{ comment.text }}</p>
+    </div>
+
+    <!-- Кнопки -->
+    <div class="d-flex gap-2 mb-2">
+        <form method="POST" action="{% url 'news:like_comment' comment.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-primary">👍 {{ comment.likes.count }}</button>
+        </form>
+        <form method="POST" action="{% url 'news:dislike_comment' comment.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-danger">👎 {{ comment.dislikes.count }}</button>
+        </form>
+    </div>
+
+    <!-- Форма ответа -->
+    {% if user.is_authenticated %}
+        <a class="btn btn-sm btn-link p-0" data-bs-toggle="collapse" href="#replyForm{{ comment.id }}">
+            Ответить
+        </a>
+        <div class="collapse mt-2" id="replyForm{{ comment.id }}">
+            <form method="POST" action="{% url 'news:add_comment' article.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                <textarea name="text" class="form-control mb-2" rows="2" required></textarea>
+                <button type="submit" class="btn btn-sm btn-primary">Отправить</button>
+            </form>
+        </div>
+    {% endif %}
+
+    <!-- Ответы -->
+    {% for child in comment.children.all %}
+        {% include "include/comment.html" with comment=child %}
+    {% endfor %}
+</div>

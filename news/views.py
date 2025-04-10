@@ -401,7 +401,31 @@ def add_comment(request, article_id):
             comment = form.save(commit=False)
             comment.article = article
             comment.author = request.user
+            parent_id = request.POST.get('parent_id')
+            if parent_id:
+                comment.parent = Comment.objects.get(id=parent_id)
             comment.save()
     return redirect('news:detail_article_by_id', pk=article_id)
 
 
+def like_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user in comment.dislikes.all():
+        comment.dislikes.remove(request.user)
+    if request.user in comment.likes.all():
+        comment.likes.remove(request.user)
+    else:
+        comment.likes.add(request.user)
+    return JsonResponse({'likes': comment.likes.count(), 'dislikes': comment.dislikes.count()})
+
+@login_required
+@require_POST
+def dislike_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user in comment.likes.all():
+        comment.likes.remove(request.user)
+    if request.user in comment.dislikes.all():
+        comment.dislikes.remove(request.user)
+    else:
+        comment.dislikes.add(request.user)
+    return JsonResponse({'likes': comment.likes.count(), 'dislikes': comment.dislikes.count()})
