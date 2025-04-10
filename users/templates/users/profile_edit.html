@@ -104,7 +104,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Превью нового аватара
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    avatarPreview.src = event.target.result;
+                    avatarPreview.src = event.target.result; // Предпросмотр
+
+                    // Подтверждение замены
+                    const confirmed = confirm('Вы подтверждаете изменение фото профиля?');
+                    if (!confirmed) {
+                        avatarInput.value = '';  // сбросить выбор
+                        avatarPreview.src = '{{ user.profile.avatar.url }}';  // вернуть старую
+                    }
                 };
                 reader.readAsDataURL(file);
             }

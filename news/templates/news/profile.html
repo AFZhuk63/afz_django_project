@@ -176,3 +176,20 @@
   }
 </style>
 {% endblock %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarForm = document.getElementById('avatarForm');
+
+    avatarInput.addEventListener('change', function () {
+      if (avatarInput.files.length > 0) {
+        const confirmed = confirm("Вы подтверждаете изменение фото профиля?");
+        if (confirmed) {
+          avatarForm.submit();
+        } else {
+          avatarInput.value = ""; // сброс выбора
+        }
+      }
+    });
+  });
+</script>

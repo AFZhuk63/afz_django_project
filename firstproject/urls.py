@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.http import HttpResponseNotFound
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -16,6 +17,8 @@ urlpatterns = [
     path('', views.MainView.as_view(), name='index'),
     path('about/', views.AboutView.as_view(), name='about'),
     path('news/', include('news.urls', namespace='news')),
+# Заглушка favicon.ico
+    path('favicon.ico', lambda request: HttpResponseNotFound()),
 
     # Пути для работы с аватаром
     path('profile/update_avatar/', update_avatar, name='update_avatar'),

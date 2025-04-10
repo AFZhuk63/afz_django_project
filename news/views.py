@@ -15,6 +15,7 @@ from django.views.generic import CreateView, DeleteView, ListView, TemplateView,
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 
+from firstproject import settings
 from .forms import ArticleForm, ArticleUploadForm, CommentForm
 from .models import Article, Favorite, Category, Like, Tag, Dislike, Comment, UserAction
 
