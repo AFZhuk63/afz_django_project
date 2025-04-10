@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-user-edit me-2"></i>Редактирование профиля</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Блок аватара -->
+                        <div class="text-center mb-4">
+                            <div class="avatar-edit-container mx-auto mb-3">
+                                <img src="{{ user.profile.avatar.url }}"
+                                     id="avatar-preview"
+                                     class="rounded-circle border border-3 border-primary"
+                                     width="150"
+                                     height="150"
+                                     alt="Текущий аватар"
+                                     onerror="this.src='{{ MEDIA_URL }}avatars/default-avatar.png'">
+                                <label for="id_avatar" class="avatar-edit-label" title="Изменить аватар">
+                                    <i class="fas fa-camera"></i>
+                                </label>
+                            </div>
+                            {{ form.avatar }}
+                            <small class="text-muted d-block">Форматы: JPG, PNG (макс. 2MB)</small>
+                            {% if form.avatar.errors %}
+                                <div class="text-danger small">{{ form.avatar.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Другие поля формы -->
+                        <div class="mb-3">
+                            <label class="form-label">Имя пользователя</label>
+                            <input type="text" class="form-control" value="{{ user.username }}" readonly>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Отмена
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-edit-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+}
+.avatar-edit-label {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid white;
+    transition: all 0.3s ease;
+}
+.avatar-edit-label:hover {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #3d8b40, #1b5e20);
+}
+#id_avatar {
+    display: none;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const avatarInput = document.getElementById('id_avatar');
+    const avatarPreview = document.getElementById('avatar-preview');
+
+    if (avatarInput) {
+        avatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Проверка типа файла
+                if (!file.type.match('image.*')) {
+                    alert('Пожалуйста, выберите изображение (JPG/PNG)');
+                    return;
+                }
+
+                // Превью нового аватара
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    avatarPreview.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

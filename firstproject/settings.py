@@ -82,6 +82,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "news.context_processors.global_context",
                 "users.context_processors.socialaccount_providers",
+                "users.context_processors.user_profile",
             ],
         },
     },
@@ -95,12 +96,14 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Welcome to ITG: Admin",
     "copyright": "ITG GmbH",
 
-    # Ваши новые настройки
-    "user_avatar": lambda user: f"https://ui-avatars.com/api/?name={user.username}&background=random",
+    # Заменяем лямбда-функции на статические значения
+    "user_avatar": "avatars/default-avatar.png",  # Статичный путь к дефолтному аватару
+
+    # Упрощаем кастомные ссылки
     "custom_links": {
         "auth": [{
-            "name": get_short_username,
-            "url": lambda user: "/news/profile/",
+            "name": "Мой профиль",  # Заменяем функцию на строку
+            "url": "news:profile",  # Используем имя URL-маршрута
             "icon": "fas fa-user",
         }]
     },
@@ -124,6 +127,13 @@ JAZZMIN_SETTINGS = {
     "custom_js": None,
     "use_google_fonts_cdn": True,
     "show_ui_builder": True,
+
+    # Добавляем явное определение порядка элементов меню
+    "order_with_respect_to": [
+        "auth",
+        "news",
+        "users",
+    ],
 }
 
 JAZZMIN_UI_TWEAKS = {
@@ -197,9 +207,10 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Автоматически создаст правильный путь
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Authentication

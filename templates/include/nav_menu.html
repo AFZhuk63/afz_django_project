@@ -2,7 +2,17 @@
     {% for item in menu %}
         <li class="nav-item">
             <a class="nav-link" href="{% url item.url_name %}">
-                {{ item.title }}
+                {% if item.title == "avatar" %}
+                    <img src="{{ item.avatar_url }}"
+                         class="rounded-circle me-1"
+                         width="20"
+                         height="20"
+                         alt="Аватар"
+                       onerror="this.src='/media/avatars/default-avatar.png'">
+                    {{ item.username }}
+                {% else %}
+                    {{ item.title }}
+                {% endif %}
             </a>
         </li>
         {% if not forloop.last %}

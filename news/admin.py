@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.contrib.admin import SimpleListFilter
 
-from .models import Article, Category, Tag
+from .models import Article, Category, Tag, Like, Dislike
 
 
 admin.site.site_header = "Админка Info to Go"

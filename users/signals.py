@@ -1,9 +1,9 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from allauth.account.models import EmailAddress
 from django.contrib.auth import get_user_model
-from news.models import UserAction  # Импортируем модель для логирования
-
+from news.models import UserAction, Category  # Импортируем модель для логирования
+from django.core.cache import cache
 User = get_user_model()
 
 
@@ -30,3 +30,9 @@ def log_user_actions(sender, instance, created, **kwargs):
             action_type='profile_update',
             description='Обновил профиль'
         )
+
+
+@receiver([post_save, post_delete], sender=Category)
+def clear_category_cache(sender, **kwargs):
+    """Очищает кеш категорий новостей."""
+    cache.delete("categories")

@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from news.views import GetAllNewsViews
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = 'news'
 
@@ -25,3 +27,5 @@ urlpatterns = [
     path('upload_json/', views.UploadJsonView.as_view(), name='upload_json'),
     path('edit_article_from_json/<int:index>/', views.EditArticleFromJsonView.as_view(), name='edit_article_from_json'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

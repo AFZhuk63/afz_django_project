@@ -3,22 +3,29 @@
 
 {% block content %}
 <div class="profile-container">
-  <!-- Шапка профиля -->
-  <div class="profile-header card card-shadow mb-4">
-    <div class="card-body">
-      <div class="d-flex align-items-center">
-        <div class="avatar-container me-4">
-          <img src="{% static 'img/default-avatar.png' %}" alt="Аватар" class="profile-avatar rounded-circle">
+<!-- Шапка профиля -->
+<div class="profile-header card card-shadow mb-4">
+  <div class="card-body">
+    <div class="d-flex align-items-center">
+      <!-- Аватар -->
+      <div class="me-4">
+        <img src="{% if profile_user.profile.avatar %}{{ profile_user.profile.avatar.url }}{% else %}/media/avatars/default-avatar.png{% endif %}"
+             alt="Аватар"
+             class="profile-avatar rounded-circle"
+             onerror="this.onerror=null;this.src='/media/avatars/default-avatar.png'">
+      </div>
+
+      <!-- Информация пользователя -->
+      <div>
+        <div class="d-flex align-items-baseline">
+          <h2 class="mb-0 me-2">{{ profile_user.get_full_name|default:profile_user.username }}</h2>
+          <span class="text-muted">@{{ profile_user.username }}</span>
         </div>
-        <div>
-          <h2>{{ profile_user.get_full_name|default:profile_user.username }}</h2>
-          <p class="text-muted mb-1">@{{ profile_user.username }}</p>
-          <p class="text-muted mb-0">{{ profile_user.email }}</p>
-        </div>
+        <p class="text-muted mb-0 mt-1">{{ profile_user.email }}</p>
       </div>
     </div>
   </div>
-
+</div>
   <!-- Вкладки -->
   <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
     <li class="nav-item" role="presentation">

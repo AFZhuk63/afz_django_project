@@ -4,7 +4,7 @@ from django.apps import AppConfig
 class UsersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'users'
-    label = 'my_users'  # Добавьте уникальный label
+    label = 'users'  # Добавьте уникальный label
 
     def ready(self):
         import users.signals  # Активация сигналов пользователей

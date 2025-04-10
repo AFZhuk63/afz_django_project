@@ -39,7 +39,10 @@ class BaseMixin(ContextMixin):
 
         if self.request.user.is_authenticated:
             menu.append({
-                "title": f"Привет, {self.request.user.username}!",
+                "title": "avatar",
+                "username": self.request.user.username,
+                "avatar_url": self.request.user.profile.get_avatar_url() if hasattr(self.request.user,
+                                                                                    'profile') else f'{settings.MEDIA_URL}avatars/default-avatar.png',
                 "url": "/news/profile/",
                 "url_name": "news:profile"
             })

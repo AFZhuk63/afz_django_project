@@ -43,19 +43,16 @@ class Dislike(models.Model):
         verbose_name = 'Дизлайк'
         verbose_name_plural = 'Дизлайки'
 <a name="миграции"></a> 2. Миграции
-Выполните в терминале:
-
-bash
+Выполнил в терминале:
 python manage.py makemigrations news
 python manage.py migrate
 
-
-bash
+# Проверка миграции
 python manage.py showmigrations news
-Должна быть новая миграция с отметкой [X].
+(Должна быть новая миграция с отметкой [X].)
 
 <a name="админ-панель"></a> 3. Настройка админ-панели
-Добавьте в news/admin.py:
+Добавляю в news/admin.py:
 
 from django.contrib import admin
 from .models import Comment, Dislike
@@ -70,9 +67,7 @@ class DislikeAdmin(admin.ModelAdmin):
     list_display = ('article', 'ip_address', 'created_at')
     list_filter = ('created_at',)
 <a name="view-функции"></a> 4. Реализация View
-Добавьте в news/views.py:
-
-python
+Добавил в news/views.py:
 
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -110,9 +105,7 @@ def add_comment(request, article_id):
     
     return redirect('news:detail_article_by_id', pk=article_id)
 <a name="urls"></a> 5. Настройка URL
-Добавьте в news/urls.py:
-
-python
+Добавил в news/urls.py:
 
 from django.urls import path
 from . import views
@@ -123,7 +116,7 @@ urlpatterns = [
     path('article/<int:article_id>/comment/', views.add_comment, name='add_comment'),
 ]
 <a name="шаблоны"></a> 6. Интеграция в шаблоны
-Добавьте в шаблон статьи:
+Добавил в шаблон статьи:
 
 html
 

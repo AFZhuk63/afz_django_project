@@ -2,6 +2,22 @@ from allauth.account.forms import SignupForm
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from .models import Profile
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['avatar']
+        widgets = {
+            'avatar': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'  # Ограничиваем выбор только изображениями
+            })
+        }
+        labels = {
+            'avatar': 'Загрузить новый аватар'
+        }
 
 
 class CustomSignupForm(SignupForm):
