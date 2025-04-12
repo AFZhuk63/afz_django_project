@@ -67,7 +67,7 @@
             <h5 class="card-title mb-0">Мои статьи</h5>
             <a href="{% url 'news:add_article' %}" class="btn btn-primary btn-sm">Добавить статью</a>
           </div>
-          
+
           {% if user_articles %}
             <div class="list-group">
               {% for article in user_articles %}
@@ -76,8 +76,8 @@
                     <div>
                       <h6 class="mb-1">{{ article.title }}</h6>
                       <small class="text-muted">
-                        {{ article.publication_date|date:"d.m.Y" }} | 
-                        Просмотры: {{ article.views }} | 
+                        {{ article.publication_date|date:"d.m.Y" }} |
+                        Просмотры: {{ article.views }} |
                         Комментарии: {{ article.comments.count }}
                       </small>
                     </div>
@@ -101,7 +101,7 @@
       <div class="card card-shadow">
         <div class="card-body">
           <h5 class="card-title mb-3">История действий</h5>
-          
+
           {% if user_actions %}
             <div class="timeline">
               {% for action in user_actions %}
@@ -141,17 +141,17 @@
     height: 120px;
     object-fit: cover;
   }
-  
+
   .timeline {
     position: relative;
     padding-left: 30px;
   }
-  
+
   .timeline-item {
     position: relative;
     padding-bottom: 20px;
   }
-  
+
   .timeline-icon {
     position: absolute;
     left: -30px;
@@ -165,12 +165,12 @@
     align-items: center;
     justify-content: center;
   }
-  
+
   .timeline-content {
     padding-left: 15px;
     border-left: 2px solid #dee2e6;
   }
-  
+
   .timeline-item:last-child .timeline-content {
     border-left: 2px solid transparent;
   }

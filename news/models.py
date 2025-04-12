@@ -2,7 +2,8 @@ import unidecode
 
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, F
+from django.utils import timezone
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 
@@ -81,6 +82,7 @@ class Tag(models.Model):
 #
 #
 class Article(models.Model):
+    # === ИСХОДНЫЙ КОД (НАЧАЛО) ===
     class Status(models.IntegerChoices):
         UNCHECKED = 0, 'не проверено'
         CHECKED = 1, 'проверено'
@@ -94,11 +96,11 @@ class Article(models.Model):
     slug = models.SlugField(unique=True, blank=True, verbose_name='Слаг')
     is_active = models.BooleanField(default=True, verbose_name='Активна')
     status = models.BooleanField(default=0,
-                                 choices=(map(lambda x: (bool(x[0]), x[1]), Status.choices)),
-                                 verbose_name='Проверено')
+                               choices=(map(lambda x: (bool(x[0]), x[1]), Status.choices)),
+                               verbose_name='Проверено')
 
     author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True, default=None,
-                               verbose_name='Автор')
+                             verbose_name='Автор')
 
     image = models.ImageField(
         upload_to='articles/%Y/%m/%d/',
@@ -106,7 +108,77 @@ class Article(models.Model):
         null=True,
         verbose_name='Изображение'
     )
+    # === ИСХОДНЫЙ КОД (КОНЕЦ) ===
 
+    # === ДОБАВЛЕНИЯ (НАЧАЛО) ===
+    class Level(models.IntegerChoices):
+        TOP = 1, 'Топ (0-12 часов)'
+        HOT = 2, 'Горячее (12-24 часа)'
+        ARCHIVE = 3, 'Архив (24-48 часов)'
+        OLD = 4, 'Устаревшие (>48 часов)'
+
+    level = models.PositiveSmallIntegerField(
+        choices=Level.choices,
+        default=Level.TOP,
+        verbose_name='Уровень важности'
+    )
+
+    class CardSize(models.TextChoices):
+        SMALL = 'sm', '6.8x6.8 см'
+        MEDIUM = 'md', '7x14 см'
+        LARGE = 'lg', '14x14 см'
+
+    card_size = models.CharField(
+        max_length=2,
+        choices=[('sm', '6.8x6.8 см'), ('md', '7x14 см'), ('lg', '14x14 см')],
+        default='md',
+        verbose_name='Размер карточки'
+    )
+
+    is_featured = models.BooleanField(
+        default=False,
+        verbose_name='В избранном дайджеста'
+    )
+
+    level = models.PositiveSmallIntegerField(
+        choices=[(1, 'Топ (0-12 часов)'), (2, 'Горячее (12-24 часа)'),
+                 (3, 'Архив (24-48 часов)'), (4, 'Устаревшие (>48 часов)')],
+        default=1,
+        verbose_name='Уровень важности'
+    )
+
+    last_level_update = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Последнее обновление уровня',
+
+    )
+
+    def update_level(self):
+        """
+        Автоматически обновляет уровень статьи на основе времени с момента публикации.
+        Обновляет last_level_update при изменении уровня.
+        """
+        now = timezone.now()
+        hours_passed = (now - self.publication_date).total_seconds() / 3600
+
+        # Определяем новый уровень
+        if hours_passed > 48:
+            new_level = self.Level.OLD  # Устаревшие (>48 часов)
+        elif hours_passed > 24:
+            new_level = self.Level.ARCHIVE  # Архив (24-48 часов)
+        elif hours_passed > 12:
+            new_level = self.Level.HOT  # Горячее (12-24 часа)
+        else:
+            new_level = self.Level.TOP  # Топ (0-12 часов)
+
+        # Если уровень изменился - сохраняем
+        if self.level != new_level:
+            self.level = new_level
+            self.last_level_update = now
+            self.save(update_fields=['level', 'last_level_update'])
+    # === ДОБАВЛЕНИЯ (КОНЕЦ) ===
+
+    # === ИСХОДНЫЙ КОД (НАЧАЛО) ===
     objects = ArticleManager()
     all_objects = AllArticleManager()
 
@@ -129,19 +201,19 @@ class Article(models.Model):
         db_table = 'Articles'  # без указания этого параметра, таблица в БД будет называться 'news_artcile'
         verbose_name = 'Статья'  # единственное число для отображения в админке
         verbose_name_plural = 'Статьи'  # множественное число для отображения в админке
-        # ordering = ['publication_date']  # указывает порядок сортировки модели по умолчанию
-        # unique_together = (...)  # устанавливает уникальность для комбинации полей
-        # index_together = (...)  # создаёт для нескольких полей
-        # indexes = (...)  # определяет пользовательские индексы
-        # abstract = True/False  # делает модель абстрактной, не создаёт таблицу БД, нужна только для наследования другими моделями данных
-        # managed = True/False  # будет ли эта модель управляться (создание, удаление, изменение) с помощью Django или нет
-        # permissions = [...]  # определяет пользовательские разрешения для модели
+        # Добавлены новые индексы для оптимизации
+        indexes = [
+            models.Index(fields=['level']),
+            models.Index(fields=['is_featured']),
+            models.Index(fields=['publication_date']),
+        ]
 
     def __str__(self):
         return self.title
 
+    # === ИСХОДНЫЙ КОД (КОНЕЦ) ===
 
-#
+
 class Like(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
     ip_address = models.GenericIPAddressField()
@@ -161,6 +233,7 @@ class Dislike(models.Model):
 
     class Meta:
         unique_together = [['article', 'ip_address']]  # Для Dislike
+
 
 class Comment(models.Model):
     article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='comments')
@@ -199,18 +272,42 @@ class UserAction(models.Model):
         ('article_delete', 'Удаление статьи'),
         ('comment_add', 'Добавление комментария'),
         ('profile_update', 'Обновление профиля'),
+        ('digest_update', 'Обновление дайджеста')  # Добавили новый тип действия
     ]
 
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    action_type = models.CharField(max_length=50, choices=ACTION_CHOICES)
-    description = models.CharField(max_length=255)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    metadata = models.JSONField(default=dict, blank=True)
+    user = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name='actions',
+        verbose_name='Пользователь'
+    )
+    action_type = models.CharField(
+        max_length=50,
+        choices=ACTION_CHOICES,
+        verbose_name='Тип действия'
+    )
+    description = models.CharField(
+        max_length=255,
+        verbose_name='Описание'
+    )
+    timestamp = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Время действия'
+    )
+    metadata = models.JSONField(
+        default=dict,
+        blank=True,
+        verbose_name='Дополнительные данные'
+    )
 
     class Meta:
         ordering = ['-timestamp']
         verbose_name = 'Действие пользователя'
         verbose_name_plural = 'Действия пользователей'
+        indexes = [
+            models.Index(fields=['user', 'timestamp']),
+        ]
 
     def __str__(self):
-        return f"{self.user.username} - {self.get_action_type_display()} - {self.timestamp}"
+        return f"{self.user_id} - {self.get_action_type_display()} - {self.timestamp}"
+
