@@ -245,6 +245,10 @@ class Comment(models.Model):
     likes = models.ManyToManyField(get_user_model(), related_name='liked_comments', blank=True)
     dislikes = models.ManyToManyField(get_user_model(), related_name='disliked_comments', blank=True)
 
+    @property
+    def is_parent(self):
+        return self.parent is None
+
     def get_indent_level(self):
         level = 0
         parent = self.parent

@@ -1,0 +1,176 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.page-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Левое меню */
+.sidebar {
+    width: 60px;
+    background-color: #2c3e50;
+    position: fixed;
+    height: 100vh;
+}
+
+.sidebar a {
+    display: block;
+    text-align: center;
+    padding: 15px 0;
+    color: white;
+    font-size: 24px;
+}
+
+/* Основная зона */
+.content {
+    margin-left: 60px;
+    flex-grow: 1;
+}
+
+/* Топ-новость */
+.top-frame {
+    height: 280px; /* ~7см */
+    background: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.top-news {
+    width: 95%;
+    height: 90%;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    overflow: hidden;
+}
+
+.top-news img {
+    width: 40%;
+    object-fit: cover;
+}
+
+.top-news .info {
+    padding: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-news .info h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.5em;
+}
+
+/* Сетка новостей */
+.news-grid {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+}
+
+/* Общие стили карточек */
+.card {
+    background: white;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.card img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.card .info {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card .info h3, .card .info h4 {
+    margin: 0 0 5px 0;
+    font-size: 1em;
+}
+
+.card .info .meta {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8em;
+    color: #666;
+}
+
+/* Специфичные размеры карточек */
+.card-lg {
+    grid-column: span 2;
+    flex-direction: row;
+    height: 200px;
+}
+
+.card-lg img {
+    width: 50%;
+    height: 100%;
+}
+
+.card-md {
+    grid-row: span 2;
+    height: 300px;
+}
+
+.card-sm {
+    height: 140px;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .top-frame {
+        height: auto;
+        flex-direction: column;
+    }
+
+    .top-news {
+        flex-direction: column;
+    }
+
+    .top-news img {
+        width: 100%;
+        height: 200px;
+    }
+
+    .card-lg, .card-md {
+        grid-column: span 1 !important;
+        grid-row: auto !important;
+        height: auto;
+        flex-direction: column;
+    }
+
+    .card-lg img {
+        width: 100%;
+        height: 200px;
+    }
+
+    .card-md img {
+        height: 200px;
+    }
+}
+.card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}

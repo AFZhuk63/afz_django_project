@@ -104,6 +104,20 @@ news/tasks.py (новый файл)
 
 Для фоновых задач без Celery можно использовать django-crontab
 
+Измененные файлы
+news/migrations/0009_add_digest_fields.py
+
+news/migrations/0010_fill_digest_values.py
+
+news/migrations/0011_remove_null_from_last_level_update.py
+
+news/models.py
+
+news/signals.py
+
+news/apps.py
+
+news/tasks.py (новый файл)
 
 
 Файл готов к сохранению как `migration_and_signals_refactoring.md` и

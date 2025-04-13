@@ -1,0 +1,34 @@
+{#<div class="article-actions">#}
+{#    <!-- Лайки/дизлайки -->#}
+{#    <form method="POST" action="{% url 'news:toggle_like' article.id %}" class="action-form">#}
+{#        {% csrf_token %}#}
+{#        <button type="submit" class="btn-action like-btn {% if article|has_liked:user_ip %}active{% endif %}">#}
+{#            <i class="bi bi-hand-thumbs-up"></i> {{ article.likes.count }}#}
+{#        </button>#}
+{#    </form>#}
+{##}
+{#    <form method="POST" action="{% url 'news:toggle_dislike' article.id %}" class="action-form">#}
+{#        {% csrf_token %}#}
+{#        <button type="submit" class="btn-action dislike-btn {% if article|has_disliked:user_ip %}active{% endif %}">#}
+{#            <i class="bi bi-hand-thumbs-down"></i> {{ article.dislikes.count }}#}
+{#        </button>#}
+{#    </form>#}
+{##}
+{#    <!-- Избранное -->#}
+{#    <form method="POST" action="{% url 'news:toggle_favorite' article.id %}" class="action-form">#}
+{#        {% csrf_token %}#}
+{#        <button type="submit" class="btn-action favorite-btn {% if article|has_favorited:user_ip %}active{% endif %}">#}
+{#            <i class="bi bi-star"></i>#}
+{#        </button>#}
+{#    </form>#}
+{##}
+{#    <!-- Комментарии -->#}
+{#    <a href="{% url 'news:detail_article_by_id' article.id %}#comments" class="btn-action comments-btn">#}
+{#        <i class="bi bi-chat-left"></i> {{ article.comments.count }}#}
+{#    </a>#}
+{##}
+{#    <!-- Кнопка подробнее -->#}
+{#    <a href="{% url 'news:detail_article_by_id' article.id %}" class="btn-action more-btn">#}
+{#        Подробнее#}
+{#    </a>#}
+{#</div>#}

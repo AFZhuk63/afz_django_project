@@ -1,0 +1,39 @@
+{#{% load customtags %}#}
+{#<div class="article-card {{ card_size }} {% if is_featured %}featured{% endif %} level-{{ article.level }}">#}
+{#    <!-- Заголовок и миниатюра -->#}
+{#    <div class="card-header">#}
+{#        <h5 class="card-title">{{ article.title }}</h5>#}
+{#        {% if article.image %}#}
+{#        <img src="{{ article.image.url }}" class="card-img-top" alt="{{ article.title }}" loading="lazy">#}
+{#        {% endif %}#}
+{#    </div>#}
+{##}
+{#    <!-- Основное содержимое -->#}
+{#    <div class="card-body">#}
+{#        <p class="card-text">{{ article.content|truncatewords:15 }}</p>#}
+{##}
+{#        <!-- Мета-информация -->#}
+{#        <div class="article-meta">#}
+{#            <span class="badge bg-primary">{{ article.get_level_display }}</span>#}
+{#            <span class="publication-date">{{ article.publication_date|timesince }} назад</span>#}
+{#            <span class="views"><i class="bi bi-eye"></i> {{ article.views }}</span>#}
+{#        </div>#}
+{##}
+{#        <!-- Категория и теги -->#}
+{#        <div class="article-taxonomy">#}
+{#            <a href="{% url 'news:get_news_by_category' article.category.id %}"#}
+{#               class="category">{{ article.category }}</a>#}
+{#            {% for tag in article.tags.all %}#}
+{#            <a href="{% url 'news:get_news_by_tag' tag.id %}"#}
+{#               class="tag" style="color: {{ tag|random_color }};">#}
+{#                #{{ tag.name|upper }}#}
+{#            </a>#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <!-- Футер с действиями -->#}
+{#    <div class="card-footer">#}
+{#        {% include "news/_article_actions.html" %}#}
+{#    </div>#}
+{#</div>#}

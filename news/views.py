@@ -1,10 +1,13 @@
 import json
+from datetime import timedelta
 
+from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.core.paginator import Paginator
-from django.db.models import F, Q
+from django.db.models import F, Q, Count
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -14,15 +17,18 @@ from django.views.generic.base import ContextMixin
 from django.views.generic import CreateView, DeleteView, ListView, TemplateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
-
+import logging
 from firstproject import settings
 from .forms import ArticleForm, ArticleUploadForm, CommentForm
 from .models import Article, Favorite, Category, Like, Tag, Dislike, Comment, UserAction
 
+from django.core.cache import cache
 import unidecode
 from django.db import models
 from django.utils.text import slugify
 
+# Инициализация логгера
+logger = logging.getLogger(__name__)
 
 class BaseMixin(ContextMixin):
     def __init__(self):
@@ -277,10 +283,69 @@ class ArticleDetailView(BaseMixin, DetailView):
 
 class MainView(BaseMixin, TemplateView):
     template_name = 'main.html'
+    cache_timeout = 60 * 5  # 5 минут кеширования
+
+    def get_featured_news(self):
+        """Топ-новость (самая популярная за последние 12 часов)"""
+        cache_key = 'main_featured_news'
+        featured = cache.get(cache_key)
+
+        if not featured:
+            featured = Article.objects.filter(
+                publication_date__gte=timezone.now() - timedelta(hours=12),
+                is_active=True,
+                status=True
+            ).select_related('category', 'author') \
+                .prefetch_related('tags') \
+                .order_by('-likes', '-publication_date') \
+                .first()
+
+            cache.set(cache_key, featured, self.cache_timeout)
+
+        return featured
+
+    def get_news_by_time_period(self, hours_start, hours_end, limit):
+        """Новости за определенный временной период"""
+        now = timezone.now()
+        return Article.objects.filter(
+            publication_date__range=(now - timedelta(hours=hours_end),
+                                     now - timedelta(hours=hours_start)),
+            is_active=True,
+            status=True
+        ).select_related('category', 'author') \
+                   .prefetch_related('tags') \
+                   .order_by('-likes', '-publication_date')[:limit]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_ip'] = self.request.META.get('REMOTE_ADDR')
+
+        try:
+            # Топ-новость (горизонтальная карточка)
+            context['featured_news'] = self.get_featured_news()
+
+            # Новости по временным периодам
+            context['top_news'] = self.get_news_by_time_period(0, 12, 8)  # 0-12 часов
+            context['hot_news'] = self.get_news_by_time_period(12, 24, 12)  # 12-24 часа
+            context['archive_news'] = self.get_news_by_time_period(24, 48, 16)  # 24-48 часов
+
+            # Для отладки
+            context['news_counts'] = {
+                'featured': 1 if context['featured_news'] else 0,
+                'top': len(context['top_news']),
+                'hot': len(context['hot_news']),
+                'archive': len(context['archive_news'])
+            }
+
+        except Exception as e:
+            logger.error(f"Error in MainView: {str(e)}", exc_info=True)
+            context.update({
+                'featured_news': None,
+                'top_news': [],
+                'hot_news': [],
+                'archive_news': [],
+                'error': str(e)
+            })
+
         return context
 
 
@@ -429,3 +494,81 @@ def dislike_comment(request, comment_id):
     else:
         comment.dislikes.add(request.user)
     return JsonResponse({'likes': comment.likes.count(), 'dislikes': comment.dislikes.count()})
+
+
+class MainView(TemplateView):
+    template_name = 'main.html'
+    cache_timeout = 60 * 15  # 15 минут (если используешь кэш)
+
+    def get_news_by_level(self, level, limit):
+        return Article.objects.filter(
+            level=level,
+            is_active=True,
+            status=True
+        ).annotate(
+            like_count=Count('likes')
+        ).order_by('-like_count', '-publication_date')[:limit]
+
+    def get_top_news(self):
+        # 1. Попробовать is_featured + level TOP
+        top_news = Article.objects.filter(
+            is_featured=True,
+            level=Article.Level.TOP,
+            is_active=True,
+            status=True,
+            image__isnull=False
+        ).annotate(
+            like_count=Count('likes')
+        ).order_by('-like_count', '-publication_date').first()
+
+        # 2. Иначе — любую TOP статью по лайкам
+        if not top_news:
+            top_news = Article.objects.filter(
+                level=Article.Level.TOP,
+                is_active=True,
+                status=True,
+                image__isnull=False
+            ).annotate(
+                like_count=Count('likes')
+            ).order_by('-like_count', '-publication_date').first()
+
+        # 3. Иначе — любую свежую статью с картинкой
+        if not top_news:
+            top_news = Article.objects.filter(
+                is_active=True,
+                status=True,
+                image__isnull=False
+            ).annotate(
+                like_count=Count('likes')
+            ).order_by('-publication_date').last()
+
+        return top_news
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Получаем уровни
+        context['level1'] = self.get_news_by_level(Article.Level.TOP, 8)
+        context['level2'] = self.get_news_by_level(Article.Level.HOT, 12)
+        context['level3'] = self.get_news_by_level(Article.Level.ARCHIVE, 6)
+
+        # Формируем общую структуру
+        context['news_grid'] = {
+            'level1': context['level1'],
+            'level2': context['level2'],
+            'level3': context['level3'],
+        }
+
+        # Главная статья
+        context['top_news'] = self.get_top_news()
+
+        # Отладочная инфа
+        context['cache_info'] = {
+            'top_news': context['top_news'].title if context['top_news'] else "None",
+            'level_1_count': len(context['level1']),
+            'level_2_count': len(context['level2']),
+            'level_3_count': len(context['level3']),
+        }
+
+        return context
+
