@@ -2,34 +2,144 @@
 {% load static %}
 
 {% block content %}
-<div style="display: flex; min-height: 100vh; font-family: Arial, sans-serif; margin: 0; padding: 0;">
-    <!-- Левое меню -->
-    <div style="width: 60px; background: #2c3e50; height: 100vh; position: fixed;">
-        <div style="padding: 15px 0; text-align: center;">
-            <a href="/" style="color: white; font-size: 24px;">≡</a>
-        </div>
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+    }
+
+    .page-wrapper {
+        display: flex;
+        height: 100vh;
+    }
+
+    .sidebar {
+        width: 60px;
+        background-color: #2c3e50;
+        position: fixed;
+        top: 56px;
+        bottom: 0;
+        left: 0;
+        z-index: 999;
+    }
+
+    .sidebar a {
+        display: block;
+        text-align: center;
+        padding: 15px 0;
+        color: white;
+        font-size: 24px;
+    }
+
+    .content {
+        margin-left: 60px;
+        padding-top: 56px;
+        height: 100vh;
+        overflow-y: auto;
+        flex-grow: 1;
+    }
+
+    .top-frame {
+        height: 7cm;
+        background: #f8f9fa;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .top-news {
+        width: 95%;
+        height: 90%;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        overflow: hidden;
+    }
+
+    .top-news img {
+        width: 40%;
+        object-fit: cover;
+    }
+
+    .top-news .info {
+        padding: 15px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .news-grid {
+        padding: 10px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(6.8cm, 1fr));
+        grid-gap: 0.2cm;
+        grid-auto-rows: 6.8cm;
+    }
+
+    .card {
+        background: white;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card img {
+        width: 100%;
+        height: 60%;
+        object-fit: cover;
+    }
+
+    .card .info {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .card .info h3 {
+        margin: 0 0 5px 0;
+        font-size: 1em;
+    }
+
+    .card .info .meta {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8em;
+        color: #666;
+    }
+</style>
+
+<div class="page-wrapper">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="/">&#8801;</a>
     </div>
 
-    <!-- Контент -->
-    <div style="margin-left: 60px; flex-grow: 1; padding: 0;">
-        <!-- Топ-новость -->
-        <div style="height: 7cm; background: #f8f9fa; border-bottom: 1px solid #ddd;
-                    display: flex; align-items: center; justify-content: center;">
+    <!-- Content -->
+    <div class="content">
+        <!-- Top News -->
+        <div class="top-frame">
             {% if top_news %}
-            <div style="width: 95%; height: 90%; background: white; border-radius: 5px;
-                        box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; overflow: hidden;">
-               {% if news.image %}
-                <img src="{{ news.image.url }}" alt="{{ news.title }}" style="width: 50%; height: 100%; object-fit: cover;">
-            {% else %}
-                <img src="{% static 'images/placeholder.jpg' %}" alt="Заглушка" style="width: 50%; height: 100%; object-fit: cover;">
-            {% endif %}
-                <div style="padding: 15px; flex: 1; display: flex; flex-direction: column;">
-                    <h2 style="margin: 0 0 10px 0; font-size: 1.5em;">{{ top_news.title }}</h2>
-                    <p style="flex-grow: 1; margin: 0; color: #555;">
-                        {{ top_news.content|default:"Здесь может быть опубликована Ваша статья"|truncatechars:255 }}
-                    </p>
+            <div class="top-news">
+                {% if top_news.image %}
+                    <img src="{{ top_news.image.url }}" alt="{{ top_news.title }}">
+                {% else %}
+                    <img src="{% static 'images/placeholder.jpg' %}" alt="Заглушка">
+                {% endif %}
+                <div class="info">
+                    <h2>{{ top_news.title }}</h2>
+                    <p>{{ top_news.content|default:"Здесь может быть опубликована Ваша статья"|truncatechars:255 }}</p>
                     <div style="display: flex; justify-content: space-between; color: #666; font-size: 0.9em;">
-                        <span>♥ {{ top_news.like_count }}</span>
+                        <span>&hearts; {{ top_news.like_count }}</span>
                         <span>{{ top_news.created_at|timesince }} назад</span>
                     </div>
                 </div>
@@ -39,85 +149,20 @@
             {% endif %}
         </div>
 
-        <!-- Отладка -->
-        <div style="padding: 10px; color: #999; font-size: 14px;">
-            <p>Уровень 1: {{level1|length }} новостей</p>
-            <p>Уровень 2: {{level2|length }} новостей</p>
-            <p>Уровень 3: {{level3|length }} новостей</p>
-        </div>
-
-        <!-- Сетка новостей -->
-        <div style="padding: 10px; display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(6.8cm, 1fr));
-                    grid-gap: 0.2cm; grid-auto-rows: 6.8cm;">
-
-            <!-- Уровень 1 -->
+        <!-- News Grid -->
+        <div class="news-grid">
             {% for news in level1 %}
-            <div style="grid-column: span 2; height: 7cm;
-                        background: white; border-radius: 5px; overflow: hidden;
-                        box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex;">
-               {% if news.image %}
-            <img src="{{ news.image.url }}" alt="{{ news.title }}" style="width: 50%; height: 100%; object-fit: cover;">
-        {% else %}
-            <img src="{% static 'images/placeholder.jpg' %}" alt="Заглушка" style="width: 50%; height: 100%; object-fit: cover;">
-        {% endif %}
-
-                <div style="padding: 10px; flex: 1; display: flex; flex-direction: column;">
-                    <h3 style="margin: 0 0 8px 0; font-size: 1.1em;">{{ news.title }}</h3>
-                    <p style="flex-grow: 1; margin: 0; font-size: 0.9em; color: #555;">
-                        {{ news.content|default:"Здесь может быть опубликована Ваша статья"|truncatechars:255 }}
-                    </p>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8em; color: #666;">
-                        <span>♥ {{ news.like_count }}</span>
-                        <span>{{ news.created_at|timesince }} назад</span>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-
-            <!-- Уровень 2 -->
-            {% for news in level2 %}
-            <div style="grid-row: span 2; height: 14cm;
-                        background: white; border-radius: 5px; overflow: hidden;
-                        box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column;">
+            <div class="card">
                 {% if news.image %}
-                    <img src="{{ news.image.url }}" alt="{{ news.title }}" style="width: 50%; height: 100%; object-fit: cover;">
+                    <img src="{{ news.image.url }}" alt="{{ news.title }}">
                 {% else %}
-                    <img src="{% static 'images/placeholder.jpg' %}" alt="Заглушка" style="width: 50%; height: 100%; object-fit: cover;">
+                    <img src="{% static 'images/placeholder.jpg' %}" alt="Заглушка">
                 {% endif %}
-
-                <div style="padding: 10px; flex: 1; display: flex; flex-direction: column;">
-                    <h4 style="margin: 0 0 8px 0; font-size: 1em;">{{ news.title }}</h4>
-                    <p style="flex-grow: 1; margin: 0; font-size: 0.8em; color: #555;">
-                        {{ news.content|default:"Здесь может быть опубликована Ваша статья"|truncatechars:255 }}
-                    </p>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.7em; color: #666;">
-                        <span>♥ {{ news.like_count }}</span>
-                        <span>{{ news.created_at|timesince }} назад</span>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-
-            <!-- Уровень 3 -->
-            {% for news in level3 %}
-            <div style="background: white; border-radius: 5px; overflow: hidden;
-                        box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column;">
-              {% if news.image %}
-                <img src="{{ news.image.url }}" alt="{{ news.title }}" style="width: 50%; height: 100%; object-fit: cover;">
-            {% else %}
-                <img src="{% static 'images/placeholder.jpg' %}" alt="Заглушка" style="width: 50%; height: 100%; object-fit: cover;">
-            {% endif %}
-
-                <div style="padding: 8px; flex: 1; display: flex; flex-direction: column;">
-                    <h4 style="margin: 0 0 5px 0; font-size: 0.8em; line-height: 1.2;">
-                        {{ news.title|truncatechars:40 }}
-                    </h4>
-                    <p style="font-size: 0.7em; color: #777;">
-                        {{ news.content|default:"Здесь может быть опубликована Ваша статья"|truncatechars:100 }}
-                    </p>
-                    <div style="margin-top: auto; display: flex; justify-content: space-between; font-size: 0.7em; color: #666;">
-                        <span>♥ {{ news.like_count }}</span>
+                <div class="info">
+                    <h3>{{ news.title }}</h3>
+                    <p>{{ news.content|default:"Здесь может быть опубликована Ваша статья"|truncatechars:200 }}</p>
+                    <div class="meta">
+                        <span>&hearts; {{ news.like_count }}</span>
                         <span>{{ news.created_at|timesince }} назад</span>
                     </div>
                 </div>

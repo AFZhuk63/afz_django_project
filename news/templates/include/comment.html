@@ -36,6 +36,8 @@
 
     <!-- Ответы -->
     {% for child in comment.children.all %}
+    <div class="ms-4 mt-3 ps-3 border-start border-2 border-secondary-subtle">
         {% include "include/comment.html" with comment=child %}
-    {% endfor %}
+    </div>
+{% endfor %}
 </div>

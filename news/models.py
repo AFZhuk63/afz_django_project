@@ -107,6 +107,7 @@ class Article(models.Model):
         blank=True,
         null=True,
         verbose_name='Изображение'
+
     )
     # === ИСХОДНЫЙ КОД (КОНЕЦ) ===
 
@@ -177,7 +178,17 @@ class Article(models.Model):
             self.last_level_update = now
             self.save(update_fields=['level', 'last_level_update'])
     # === ДОБАВЛЕНИЯ (КОНЕЦ) ===
-
+    original_url = models.URLField(
+        blank=True,
+        null=True,
+        verbose_name='Оригинальная ссылка'
+    )
+    external_author = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name='Автор (оригинал)'
+    )
     # === ИСХОДНЫЙ КОД (НАЧАЛО) ===
     objects = ArticleManager()
     all_objects = AllArticleManager()

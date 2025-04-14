@@ -2,6 +2,14 @@
 {% block content %}
 <h1>Редактировать статью "{{ article.title }}"</h1>
 <form method="post" enctype="multipart/form-data">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+{% endif %}
     {% csrf_token %}
     {{ form.as_p }}
     <div class="mt-3">
