@@ -79,7 +79,7 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(6.8cm, 1fr));
         grid-gap: 0.2cm;
-        grid-auto-rows: 6.8cm;
+        grid-auto-rows: auto;
     }
 
     .card {
@@ -93,7 +93,6 @@
 
     .card img {
         width: 100%;
-        height: 60%;
         object-fit: cover;
     }
 
@@ -104,7 +103,7 @@
         flex-grow: 1;
     }
 
-    .card .info h3 {
+    .card .info h3, .card .info h4 {
         margin: 0 0 5px 0;
         font-size: 1em;
     }
@@ -149,10 +148,11 @@
             {% endif %}
         </div>
 
-        <!-- News Grid -->
+        <!-- Горячие статьи (Level 1) -->
+        <h4 style="margin: 20px 0 10px 15px; color: #2c3e50;">🔥 Горячие статьи</h4>
         <div class="news-grid">
             {% for news in level1 %}
-            <div class="card">
+            <div class="card" style="height: 7cm;">
                 {% if news.image %}
                     <img src="{{ news.image.url }}" alt="{{ news.title }}">
                 {% else %}
@@ -161,6 +161,50 @@
                 <div class="info">
                     <h3>{{ news.title }}</h3>
                     <p>{{ news.content|default:"Здесь может быть опубликована Ваша статья"|truncatechars:200 }}</p>
+                    <div class="meta">
+                        <span>&hearts; {{ news.like_count }}</span>
+                        <span>{{ news.created_at|timesince }} назад</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Популярное за сутки (Level 2) -->
+        <h4 style="margin: 20px 0 10px 15px; color: #2c3e50;">🔥 Популярное за сутки</h4>
+        <div class="news-grid">
+            {% for news in level2 %}
+            <div class="card" style="height: 12cm;">
+                {% if news.image %}
+                    <img src="{{ news.image.url }}" alt="{{ news.title }}">
+                {% else %}
+                    <img src="{% static 'images/placeholder.jpg' %}" alt="Заглушка">
+                {% endif %}
+                <div class="info">
+                    <h3>{{ news.title }}</h3>
+                    <p>{{ news.content|default:"Здесь может быть опубликована Ваша статья"|truncatechars:200 }}</p>
+                    <div class="meta">
+                        <span>&hearts; {{ news.like_count }}</span>
+                        <span>{{ news.created_at|timesince }} назад</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Архив (Level 3) -->
+        <h4 style="margin: 20px 0 10px 15px; color: #2c3e50;">📦 Архив</h4>
+        <div class="news-grid">
+            {% for news in level3 %}
+            <div class="card" style="height: 6cm;">
+                {% if news.image %}
+                    <img src="{{ news.image.url }}" alt="{{ news.title }}">
+                {% else %}
+                    <img src="{% static 'images/placeholder.jpg' %}" alt="Заглушка">
+                {% endif %}
+                <div class="info">
+                    <h4>{{ news.title|truncatechars:40 }}</h4>
+                    <p style="font-size: 0.8em;">{{ news.content|default:"..."|truncatechars:100 }}</p>
                     <div class="meta">
                         <span>&hearts; {{ news.like_count }}</span>
                         <span>{{ news.created_at|timesince }} назад</span>

@@ -15,6 +15,7 @@ from users.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.MainView.as_view(), name='index'),
+    path('', views.index, name='index'), # связь с Django-docker
     path('about/', views.AboutView.as_view(), name='about'),
     path('news/', include('news.urls', namespace='news')),
 # Заглушка favicon.ico

@@ -6,7 +6,7 @@
     <!-- Основное содержимое -->
     <div class="card-body" style="grid-area: content; min-width: 0; padding: 0.75rem;">
         <h5 class="card-title mb-1">#{{ article.id }}. {{ article.title }}</h5>
-        <p class="card-text mb-1" style="font-size: 0.9rem;">{{ article.content|truncatewords:7 }}</p>
+        <p class="card-text mb-1" style="font-size: 0.9rem;">{{ article.content|truncatewords:25 }}</p>
         <p class="card-text mb-1">
             <a href="{% url 'news:get_news_by_category' article.category.id %}" class="text-decoration-none text-primary fw-bold category-link" style="font-size: 0.85rem;">{{ article.category }}</a>
         </p>

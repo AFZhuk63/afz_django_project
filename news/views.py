@@ -572,3 +572,6 @@ class MainView(TemplateView):
 
         return context
 
+
+def index(request):
+    return None
