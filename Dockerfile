@@ -1,37 +1,44 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
-# Устанавливаем рабочую директорию
+# 1. Установка системных зависимостей
+RUN apt-get update && apt-get install -y \
+    netcat-openbsd \
+    gcc \
+    libpq-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# 2. Рабочая директория
 WORKDIR /app
 
-# Установка необходимых системных библиотек (например, для selenium)
-RUN apt-get update && apt-get install -y \
-    curl \
-    unzip \
-    libglib2.0-0 \
-    libx11-dev \
-    libgdk-pixbuf2.0-0 \
-    libatk1.0-0 \
-    libpango-1.0-0 \
-    libgdk-pixbuf2.0-0 \
-    && rm -rf /var/lib/apt/lists/*
-
-# Копируем файл зависимостей
+# 3. Сначала копируем ТОЛЬКО requirements.txt
 COPY requirements.txt .
 
-# Обновляем pip, setuptools и wheel
-RUN pip install --upgrade pip setuptools wheel
+# 4. Установка зависимостей (явно указываем полный путь к pip)
+RUN python -m pip install --upgrade pip && \
+    python -m pip install -r requirements.txt
 
 
+# После установки зависимостей
+RUN python -m pip list && \
+    python -c "import sys; print(sys.path)"
 
-# Устанавливаем Python-зависимости
-RUN pip install --no-cache-dir -r requirements.txt
+# 5. Копируем скрипты
+COPY entrypoint.sh wait-for-db.sh ./
+RUN chmod +x entrypoint.sh wait-for-db.sh
 
+# 6. Переменные окружения
+ENV DOCKERIZED=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
-# Копируем проект
+# 7. Копируем весь проект
 COPY . .
 
-# Открываем порт
-EXPOSE 8000
+# 8. Проверяем установку Django перед collectstatic
+RUN python -c "import django; print(django.__version__)" && \
+    mkdir -p /static && \
+    python manage.py collectstatic --no-input
 
-# Запускаем Django сервер
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# 9. Запуск
+
+ENTRYPOINT ["./entrypoint.sh"]

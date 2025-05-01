@@ -1,37 +1,47 @@
-version: "3.9"
+#version: "3.9"
 
 services:
   db:
-    image: postgres:15
-    container_name: postgres_db
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: itg
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - django_net
-
-  web:
-    build: .
-    container_name: django_web
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
+    image: postgres:13
+    container_name: db
     env_file:
       - .env
+    environment:
+      - POSTGRES_DB=${PG_NAME}
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    image: itg_web:latest      # <-- добавили
+    build: .
+#    command: gunicorn firstproject.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - .env
+    environment:
+      - DOCKERIZED=1        # <-- добавляем
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
     depends_on:
       - db
-    networks:
-      - django_net
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
-
-networks:
-  django_net:
-
+  static_volume:
+  media_volume:
