@@ -2,7 +2,7 @@
 set -e
 
 # Ожидаем доступности БД
-./wait-for-db.sh db:5432
+./wait-for-db.sh "$PG_HOST:$PG_PORT"
 
 # Выполняем миграции
 echo "📦 Applying migrations..."
