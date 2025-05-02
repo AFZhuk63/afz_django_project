@@ -270,6 +270,13 @@ curl http://localhost
 curl http://<your-ec2-public-ip>
 ```
 
+# Команда для остановки и запуска контейнера без использования cache 
+
+```bash
+docker-compose down -v
+docker-compose build --no-cache
+docker-compose up # Запуск контейнера
+``` 
 ---
 
 ### Заключение

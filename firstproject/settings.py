@@ -27,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
 # ======================== Основные настройки ========================
-SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = os.getenv('DEBUG', False) == 'True'
-ALLOWED_HOSTS = []
+SECRET_KEY = os.environ.get('SECRET_KEY')
+DEBUG = os.environ.get("DEBUG", "False").lower() in ("true", "1")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 INTERNAL_IPS = ['127.0.0.1']
 
 # ======================== Настройки приложений ========================
@@ -231,7 +231,6 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # ACCOUNT_AUTHENTICATION_METHOD = "email" # метод устарел, использую ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_LOGIN_METHODS = {'email'}
 # ACCOUNT_USERNAME_REQUIRED = False # метод устарел, использую ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
@@ -243,12 +242,12 @@ ACCOUNT_FORMS = {'signup': 'users.forms.CustomSignupForm'}
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = os.getenv('EMAIL_PORT')
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS") == "True"
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
 
 # Sessions
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
